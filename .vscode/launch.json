@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-GamestoreApplication<Gamestore>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.gamestore.GamestoreApplication",
+            "projectName": "Gamestore",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-OnlineShopingApplication<OnlineShoping>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.OnlineShoping.OnlineShopingApplication",
+            "projectName": "OnlineShoping",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

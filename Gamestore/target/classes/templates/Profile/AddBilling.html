@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{header::common-header}">
+</head>
+
+<body>
+
+    <header th:insert="~{header::header}"></header>
+    <div th:replace="~{header::scripts}"></div>
+    <section th:insert="~{/Profile/NavigatDrawer::Navigation-section}"></section>
+
+    <div class="container">
+        <div class="breadcrumb-panel">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item mt-1"><a  th:style="${CreditPageOpen} ? 'color:#000' " href="/Billing">Home</a></li>
+                    <li class="breadcrumb-item active mt-1"
+                        aria-current="page"><a th:href="@{/addNewCreditCard}" th:style="${CreditPageOpen} ? 'color:#ffe600' ">Update/Add Credit Details</a></li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container AddBilling">
+        <div th:if="${addNewCreditCard}" class=" w-100 mx-auto p-6 bg-white rounded-lg shadow-lg mt-10">
+            <form th:action="@{/addNewCreditCard}" onsubmit="return validateCardDetails()" method="post">
+
+                <input type="hidden" name="id" th:value="${userPayment.id}">
+
+                <div class="mb-4">
+                    <label for="cardName" class="block text-gray-700 font-semibold mb-2">* Give a name for your
+                        card:</label>
+                    <input type="text" class="form-control w-full p-2 border border-gray-300 rounded-lg text-sm"
+                        id="cardName" placeholder="Card Name" th:name="cardName" required
+                        th:value="${userPayment.cardName}" />
+                </div>
+
+                <hr class="my-4" />
+                <div class="form-group mb-4">
+                    <h4 class="text-lg font-semibold text-gray-700 mb-2" style="font-family: 'Rubik', sans-serif">Billing Address</h4>
+                </div>
+                <div class="mb-4">
+                    <label for="billingname" class="block text-gray-700 font-semibold mb-2">* Name</label>
+                    <input type="text" class="form-control w-full p-2 border border-gray-300 rounded-lg"
+                        id="userBillName" placeholder="Receiver Name" th:name="userBillName" required
+                        th:value="${userBilling.userBillName}" />
+                </div>
+                <div class="mb-4">
+                    <label for="billingAddress" class="block text-gray-700 font-semibold mb-2">* Street Address</label>
+                    <input type="text" class="form-control w-full p-2 border border-gray-300 rounded-lg mb-2"
+                        id="billingAddress" placeholder="Street Address 1" th:name="street" required
+                        th:value="${userBilling.street}" />
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="mb-4">
+                        <label for="billingCity" class="block text-gray-700 font-semibold mb-2">* City</label>
+                        <input type="text" class="form-control w-full p-2 border border-gray-300 rounded-lg"
+                            id="billingCity" placeholder="Billing city" th:name="city" required
+                            th:value="${userBilling.city}" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="billingState" class="block text-gray-700 font-semibold mb-2">* State</label>
+                        <select id="billingState"
+                            class="form-control w-full p-2 border border-gray-300 rounded-lg card-option"
+                            th:name="state" required th:value="${userBilling.state}">
+                            <option value="" disabled>Please select an option</option>
+                            <option class="card-option" th:each="state : ${stateList}" th:value="${state.key}"
+                                th:text="${state.value}" th:selected="${userBilling.state} == ${state.key}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    
+                    <div class="mb-4">
+                        <label for="billingCountry" class="block text-gray-700 font-semibold mb-2">* Country</label>
+                        <input type="text" class="form-control w-full p-2 border border-gray-300 rounded-lg"
+                            id="billingCountry" placeholder="Billing country" th:name="country" required
+                            th:value="${userBilling.country}" />
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="billingZipcode" class="block text-gray-700 font-semibold mb-2">* Zipcode</label>
+                        <input type="text" class="form-control w-full p-2 border border-gray-300 rounded-lg"
+                            id="billingZipcode" placeholder="Billing Zipcode" th:name="zipcode" required
+                            th:value="${userBilling.zipcode}" />
+                    </div>
+                </div>
+
+                <!-- Credit Card Information -->
+                <hr class="my-4" />
+                <div class="form-group mb-4">
+                    <h4 class="text-lg font-semibold text-gray-700 mb-2"  style="font-family: 'Rubik', sans-serif">Credit Card Information</h4>
+                    <div class="row d-flex payment-gateway pl-3">
+						<h4 style="font-family: 'Rubik', sans-serif">Payment Gateways</h4>
+						<img src="/images/gateway/visa.png" alt="visa" />
+						<img src="/images/gateway/apple-pay.png" alt="" />
+						<img src="/images/gateway/mastercard.png" alt="" />
+						<img src="/images/gateway/bank-card-back-side.png" alt="" />
+					</div>
+                </div>
+                <div class="mb-4">
+                    <label for="cardType" class="block text-gray-700 font-semibold mb-2">* Select Card Type:</label>
+                    <select class="form-control w-full p-2 border border-gray-300 rounded-lg card-option" id="cardType"
+                        th:name="type" th:value="${userPayment.type}">
+                        <option class="card-option" value="Regular Credit Cards">Regular Credit Cards</option>
+                        <option class="card-option" value="Premium Credit Cards">Premium Credit Cards</option>
+                        <option class="card-option" value="Super Premium Credit Cards">Super Premium Credit Cards
+                        </option>
+                        <option class="card-option" value="Co-branded Credit Cards">Co-branded Credit Cards</option>
+                        <option class="card-option" value="Commercial or Business Credit Cards">Commercial or Business
+                            Credit Cards</option>
+                        <option class="card-option" value="CashBack Credit Cards">CashBack Credit Cards</option>
+                        <option class="card-option" value="Secured Credit Cards">Secured Credit Cards</option>
+                        <option class="card-option" value="Travel Credit Cards">Travel Credit Cards</option>
+                        <option class="card-option" value="Shopping Credit Cards">Shopping Credit Cards</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="cardHolder" class="block text-gray-700 font-semibold mb-2">* Card Holder Name:</label>
+                    <input type="text" class="form-control w-full p-2 border border-gray-300 rounded-lg" id="cardHolder"
+                        required placeholder="Card Holder Name" th:name="holderName"
+                        th:value="${userPayment.holderName}" />
+                </div>
+                <div class="mb-4">
+                    <label for="cardNumber" id="cardNumber" class="block text-gray-700 font-semibold mb-2" th:value="${userPayment.cardNumber}" oninput="formatCardNumber(this)" maxlength="19">* Card Number:</label>
+                    <p class="mx-2">Card number is usally 16 digit Enter here from your credit card</p>
+                    <div class="flex">
+                        <input type="tel" class="form-control w-full p-2 border border-gray-300 rounded-l-lg"
+                            id="cardNumber" required placeholder="1234 5678 9012 3456" th:name="cardNumber"
+                            th:value="${userPayment.cardNumber}" oninput="formatCardNumber(this)" />
+
+                        <span class="flex items-center bg-transparent px-3 rounded-lg"
+                            style="box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px inset;"><svg
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+                                color="#000000" fill="none">
+                                <path
+                                    d="M3.3457 16.1976L16.1747 3.36866M18.6316 11.0556L16.4321 13.2551M14.5549 15.1099L13.5762 16.0886"
+                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                <path
+                                    d="M3.17467 16.1411C1.60844 14.5749 1.60844 12.0355 3.17467 10.4693L10.4693 3.17467C12.0355 1.60844 14.5749 1.60844 16.1411 3.17467L20.8253 7.85891C22.3916 9.42514 22.3916 11.9645 20.8253 13.5307L13.5307 20.8253C11.9645 22.3916 9.42514 22.3916 7.85891 20.8253L3.17467 16.1411Z"
+                                    stroke="currentColor" stroke-width="1.5" />
+                                <path d="M4 22H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label for="expiryMonth" class="block text-gray-700 font-semibold mb-2">* Expiry Month:</label>
+                        <select class="form-control w-full p-2 border border-gray-300 rounded-lg card-option"
+                            id="expiryMonth" required th:name="expiryMonth">
+                            <option class="card-option" value="" disabled selected>Select Month</option>
+                            <option class="card-option" value="01">January</option>
+                            <option class="card-option" value="02">February</option>
+                            <option class="card-option" value="03">March</option>
+                            <option class="card-option" value="04">April</option>
+                            <option class="card-option" value="05">May</option>
+                            <option class="card-option" value="06">June</option>
+                            <option class="card-option" value="07">July</option>
+                            <option class="card-option" value="08">August</option>
+                            <option class="card-option" value="09">September</option>
+                            <option class="card-option" value="10">October</option>
+                            <option class="card-option" value="11">November</option>
+                            <option class="card-option" value="12">December</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="expiryYear" class="block text-gray-700 font-semibold mb-2">* Expiry Year:</label>
+                        <select class="form-control w-full p-2 border border-gray-300 rounded-lg card-option"
+                            id="expiryYear" required th:name="expiryYear">
+                            <option class="card-option" value="" disabled selected>Select Year</option>
+                            <option class="card-option" value="2024">2024</option>
+                            <option class="card-option" value="2025">2025</option>
+                            <option class="card-option" value="2026">2026</option>
+                            <option class="card-option" value="2027">2027</option>
+                            <option class="card-option" value="2028">2028</option>
+                            <option class="card-option" value="2029">2029</option>
+                            <option class="card-option" value="2030">2030</option>
+                            <option class="card-option" value="2031">2031</option>
+                            <option class="card-option" value="2032">2032</option>
+                            <option class="card-option" value="2033">2033</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="cvv" class="block text-gray-700 font-semibold mb-2">* CVV:</label>
+                        <input type="text" class="form-control w-full p-2 border border-gray-300 rounded-lg" id="cvv"
+                            required placeholder="CVV" th:name="cvv" th:value="${userPayment.cvv}" oninput="formatCvv(this)"/>
+                    </div>
+                </div>
+
+                <div class="flex items-center mb-4">
+                    <input id="default-checkbox" type="checkbox" value=""
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        style="outline: 2px solid rgb(4, 4, 6);">
+                    <label for="default-checkbox" class="ms-2 pt-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        style="font-size: 12px;">Make It Default</label>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="bg-black text-white py-2 px-4 rounded-lg">Continue To Billing
+                        Information</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer th:replace="~{index::footer}"></footer>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.4.1/flowbite.min.js"></script>
+    <script>
+        function formatCardNumber(input) {
+            let value = input.value.replace(/\D/g, ''); 
+            value = value.slice(0, 16); 
+            input.value = value.replace(/(\d{4})(?=\d)/g, '$1 '); 
+        }
+        
+        function formatCvv(input) {
+            let value = input.value.replace(/\D/g, ''); 
+            value = value.slice(0, 3); 
+            input.value = value.replace(/(\d{4})(?=\d)/g, '$1 '); 
+        }
+        
+        function validateCardDetails() {
+            const cardNumberInput = document.getElementById('cardNumber');
+            const cardNumberError = document.getElementById('cardNumberError');
+            const cardNumber = cardNumberInput.value.replace(/\s/g, ''); 
+
+            if (cardNumber.length !== 16) {
+                cardNumberError.style.display = 'block';
+                return false; 
+            } else {
+                cardNumberError.style.display = 'none';
+                return true;
+            }
+        }
+    </script>
+</body>
+
+</html>

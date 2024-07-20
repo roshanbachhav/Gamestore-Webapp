@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.thymeleaf.org" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+  <head th:insert="~{header::common-header}">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <header th:insert="~{header::header}"></header>
+
+    <div class="container"></div>
+
+    <div class="vh">
+      <img src="/images/index.png" alt="img" />
+      <a href="/shop"><button class="buy">Buy</button></a>
+    </div>
+
+    <div id="page2">
+      <div id="video-container">
+        <video autoplay loop muted src="/images/posterVideo1.mp4"></video>
+      </div>
+    </div>
+
+    <!-- special features -->
+    <!-- <div class="special-feature-h1">
+      <h1>special features</h1>
+    </div>
+
+    <div id="page3">
+      <div id="elem1" class="elem">
+        <a href="#">
+          <img
+            data-scroll
+            data-scroll-speed="1"
+            src="/images/gtav_2.jpg"
+            alt=""
+          />
+        </a>
+      </div>
+      <div id="elem2" class="elem">
+        <a href="#">
+          <img
+            data-scroll
+            data-scroll-speed="1"
+            src="/images/hitman.jpg"
+            alt=""
+          />
+        </a>
+      </div>
+      <div id="elem3" class="elem">
+        <a href="#">
+          <img
+            data-scroll
+            data-scroll-speed="1"
+            src="/images/spiderman.jpeg"
+            alt=""
+          />
+        </a>
+      </div>
+    </div> -->
+
+    <!-- Services section -->
+    <section class="my-3" th:replace="~{Services::Services}"></section>
+
+    <br />
+
+    <!-- Trust section -->
+    <section th:replace="~{Trust::trust}"></section>
+
+
+    <!-- Footer Section -->
+    <footer class="footer-14398 mt-5" th:fragment="footer">
+      <div class="container">
+        <div class="row mb-2">
+          <div class="col-md-3">
+            <a href="#" class="footer-site-logo">RV GameStore</a>
+            <p>
+              GameZone, your ultimate gaming destination, offers a curated
+              selection of top titles, ensuring a thrilling gaming experience
+              with exclusive deals and exceptional graphics.
+            </p>
+            <!-- <hr /> -->
+            <!-- <div class="row d-flex payment-gateway">
+              <h4>Payment Gateways</h4>
+              <img src="/images/gateway/visa.png" alt="visa" />
+              <img src="/images/gateway/apple-pay.png" alt="" />
+              <img src="/images/gateway/mastercard.png" alt="" />
+              <img src="/images/gateway/bank-card-back-side.png" alt="" />
+            </div> -->
+          </div>
+          <div class="col-md-2 ml-auto">
+            <h3>Discover</h3>
+            <ul class="list-unstyled links">
+              <li><a th:href="@{/AboutUs}">About Us</a></li>
+              <li><a th:href="@{/FAQ}">FAQs</a></li>
+              <li><a th:href="@{/PaymentTerms}">Payments</a></li>
+              <li><a th:href="@{/contact}">Contact Us</a></li>
+              <li><a th:href="@{/contact}">Query Tell</a></li>
+              <!-- <li><a href="#">Shopping Policy</a></li> -->
+            </ul>
+          </div>
+          <div class="col-md-2 ml-auto">
+            <h3>Our Services</h3>
+            <ul class="list-unstyled links">
+              <li><a th:href="@{/}">Home</a></li>
+              <li><a th:href="@{/shop}">Shop</a></li>
+              <li><a th:href="@{/MyProfile}">Profile</a></li>
+              <li><a sec:authorize="isAuthenticated()" th:href="@{/Order}">Orders</a></li>
+              <li><a sec:authorize="isAuthenticated()" th:href="@{/logout}">Logout</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto p-0 mb-md-0 mb-4">
+            <h3>Contact Me</h3>
+            <p>
+              <i class="fa-solid fa-location-dot location"></i> Siddhatek Nagar
+              Nashik, 422008
+            </p>
+            <p>
+              <i class="fas fa-envelope mr-3"></i> bachhavroshan600@gmail.com
+            </p>
+            <p><i class="fas fa-phone mr-3"></i> +91 770 963 877 6</p>
+            <p>
+              <i class="fa-brands fa-whatsapp"></i> +91 770 963 877 6 (WhatsApp)
+            </p>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <div class="col-12 pb-4">
+            <div class="line"></div>
+          </div>
+          <div class="col-md-6 text-md-left">
+            <ul class="list-unstyled link-menu nav-left">
+              <li><a th:href="@{/Privacy-Policy}">Privacy Policy</a></li>
+              <li><a th:href="@{/Term-and-Condition}">Terms &amp; Conditions</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-7">
+            <p>
+              Experience the best in gaming at GameZone. Our mission is to
+              provide you with an unparalleled gaming journey, featuring the
+              latest titles, exclusive deals, and cutting-edge graphics.
+            </p>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-7">
+            <span>
+              <p><strong>&copy; 2023 Copyright: </strong> RVGameStore.com</p>
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Script Section -->
+    <div th:replace="~{header::scripts}"></div>
+  </body>
+</html>

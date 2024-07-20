@@ -1,0 +1,9 @@
+package com.gamestore.services;
+
+import com.gamestore.domain.Contact;
+import com.gamestore.domain.User;
+
+public interface ContactService {
+	Contact addNewContactInfo(User id, String username , String email , String msg);
+	Contact save(Contact contact);
+}

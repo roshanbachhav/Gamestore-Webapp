@@ -1,0 +1,27 @@
+package com.adminportal.sevices.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.adminportal.Repository.OrderServiceRepository;
+import com.adminportal.domain.Order;
+import com.adminportal.sevices.OrderService;
+
+@Service
+public class OrderServiceImpl implements OrderService{
+
+	@Autowired
+	private OrderServiceRepository orderServiceRepository;
+	
+	public List<Order> findAll(){
+		return (List<Order>) orderServiceRepository.findAll();
+	}
+
+	@Override
+	public void deleteOrderById(Long id) {
+				
+	}
+	
+}

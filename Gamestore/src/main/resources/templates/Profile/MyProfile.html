@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{header::common-header}">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.css"  rel="stylesheet" />
+</head>
+<body>
+
+	<header th:insert="~{header::header}"></header>
+	<div th:replace="~{header::scripts}"></div>
+
+    <section th:insert="~{/Profile/NavigatDrawer::Navigation-section}"></section>
+
+	<div class="container" style="height: 100%;">
+		<span class="mp-span">
+			<h1>Hello</h1>
+			<h1>,</h1>
+			<h1 th:text="${user.username}"></h1>
+		</span>
+		<hr>
+		<p class="mp-span">Hey Welcome To Our Website get the product make a smile child face. </p>
+	</div>
+ 
+
+	<div class="container mb-12">
+		<div class="row">
+			<hr style="width: 50%;display: flex; background: black ; justify-content: center;position: relative;left: 25%;align-items: center;">
+			<div class="col-sm-6">
+				<div class="persnol-info">
+					<svg class="persnol-info-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="35"
+						height="35" color="#000000" fill="none">
+						<path
+							d="M15 5C15 6.65685 13.2418 8.5 12 8.5C10.7582 8.5 9 6.65685 9 5C9 3.34315 10.3431 2 12 2C13.6569 2 15 3.34315 15 5Z"
+							stroke="currentColor" stroke-width="1.5" />
+						<path
+							d="M16.0415 9C17.5645 10.3353 18.5513 12.5969 17.6651 14.7052C17.4742 15.1594 17.0361 15.4539 16.5514 15.4539C16.0585 15.4539 15.2489 15.296 15.0917 15.9374L13.9944 20.4123C13.7656 21.3454 12.9433 22 12 22C11.0567 22 10.2344 21.3454 10.0056 20.4123L8.90833 15.9374C8.75103 15.296 7.94149 15.4539 7.44862 15.4539C6.9639 15.4539 6.52582 15.1594 6.33488 14.7052C5.44866 12.5969 6.43558 10.3353 7.95857 9"
+							stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+					</svg>
+					<p class="persnol-info">Persnol Information</p>
+				</div>
+				<hr class="mb-4">
+				<div class="col-md-12 ml-5 pl-4">
+					<div class="fname p-2 px-5">
+						<h1 class="heading-tag">FirstName<span class="colon-space"></span></h1>
+						<h1 class="heading-tag" th:text="${user.firstName}"></h1>
+					</div>
+					<br>
+					<div class="fname p-2 px-5">
+						<h1 class="heading-tag">LastName<span class="colon-space"></span></h1>
+						<h1 class="heading-tag" th:text="${user.lastName}"></h1>
+					</div>
+					<br>
+					<div class="fname p-2 px-5">
+						<h1 class="heading-tag">UserName<span class="colon-space"></span></h1>
+						<h1 class="heading-tag" th:text="${user.username}"></h1>
+					</div>
+					<br>
+					<div class="fname p-2 px-5">
+						<h1 class="heading-tag">Email<span class="colon-space"></span></h1>
+						<h1 class="heading-tag" th:text="${user.email}"></h1>
+					</div>
+					<br>
+					<div class="fname p-2 px-5">
+						<h1 class="heading-tag">Phone Number<span class="colon-space"></span></h1>
+						<h1 class="heading-tag" th:text="${user.phone != null} ? '+91 ' + ${user.phone} : ''"></h1>
+					</div>
+				</div>
+				<br>
+			</div>
+			<div class="col-6">
+				<div class="persnol-info">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="34" height="34" color="#000000"
+						fill="none">
+						<path
+							d="M12.9981 6.5H11.0019C8.13196 6.5 6.19701 9.56909 7.32753 12.328C7.48501 12.7124 7.84633 12.9615 8.24612 12.9615H8.9491C9.18605 12.9615 9.39259 13.1302 9.45006 13.3706L10.3551 17.1567C10.5438 17.9462 11.222 18.5 12 18.5C12.778 18.5 13.4562 17.9462 13.6449 17.1567L14.5499 13.3706C14.6074 13.1302 14.814 12.9615 15.0509 12.9615H15.7539C16.1537 12.9615 16.515 12.7124 16.6725 12.328C17.803 9.56909 15.868 6.5 12.9981 6.5Z"
+							stroke="currentColor" stroke-width="1.5" />
+						<path
+							d="M14.5 4C14.5 5.38071 13.3807 6.5 12 6.5C10.6193 6.5 9.5 5.38071 9.5 4C9.5 2.61929 10.6193 1.5 12 1.5C13.3807 1.5 14.5 2.61929 14.5 4Z"
+							stroke="currentColor" stroke-width="1.5" />
+						<path d="M7 16.5L6 16.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+							stroke-linejoin="round" />
+						<path d="M12 21.5L12 22.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+							stroke-linejoin="round" />
+						<path d="M18 16.5L17 16.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+							stroke-linejoin="round" />
+					</svg>
+					<p class="persnol-info">Address Information</p>
+				</div>
+				<hr class="mb-4">
+				<div class="col-md-12 ml-5 pl-4">
+					<div class="fname p-2 px-5">
+						<h1 class="heading-tag">Address<span class="colon-space"></span></h1>
+						<h1 class="heading-tag" th:text="${#strings.toUpperCase(user.address)}"></h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+
+
+
+
+	<footer th:replace="~{index::footer}"></footer>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
+	
+	<script>
+		const urlParams = new URLSearchParams(window.location.search);
+		if (urlParams.has("successfulUpdateInfo")) {
+			Swal.fire({
+				title: "Congrats!",
+				text: "Your profile update successfully!",
+				icon: "success",
+			});
+		}
+	</script>
+</body>
+
+</html>

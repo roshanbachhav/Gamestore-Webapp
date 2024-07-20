@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<link rel="website icon" type="png" href="/images/game-store-logo.png" />
+		<link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link href="/css/style.css" rel="stylesheet" />
+    <link rel="website icon" type="png" href="/images/game-store-logo.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+    />
+    <link
+      href="https://cdn.datatables.net/v/dt/dt-2.0.8/datatables.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.css"
+      rel="stylesheet"
+    />
+	</head>
+
+	<body class="main-page">
+
+		<header th:insert="~{common/header :: header}"></header>
+
+		<div class="container mb-5">
+			<div class="border-b border-gray-200 dark:border-gray-700">
+				<ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+					<li class="me-2">
+						<a href="#" class="inline-flex items-center justify-center p-4 text-sm text-green-600 border-b-2 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 font-medium group tab-link" data-tab="user" aria-current="page">
+							Users
+						</a>
+					</li>
+					<li class="me-2">
+						<a href="#" class="inline-flex items-center justify-center text-sm p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 font-medium group tab-link" data-tab="order">
+							Order
+						</a>
+					</li>
+					<li class="me-2">
+						<a href="#" class="inline-flex items-center justify-center text-sm p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 font-medium group tab-link" data-tab="shipping">
+							Shipping
+						</a>
+					</li>
+					<li class="me-2">
+						<a href="#" class="inline-flex items-center justify-center text-sm p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 decoration-none hover:border-gray-300 font-medium dark:hover:text-gray-300 group tab-link" data-tab="payment">
+							Payment
+						</a>
+					</li>
+					<li class="me-2">
+						<a href="#" class="inline-flex items-center justify-center text-sm p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 decoration-none hover:border-gray-300 font-medium dark:hover:text-gray-300 group tab-link" data-tab="billing">
+							Billing
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+
+
+		<div class="container tab-content" id="user">
+			<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+				<table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+					<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+						<tr>
+							<th scope="col" class="px-6 py-3">
+								User Id
+							</th>
+							<th scope="col" class="px-6 py-3">
+								UserName
+							</th>
+							<th scope="col" class="px-12 py-3">
+								Mail
+							</th>
+							<th scope="col" class="px-6 py-3">
+								FirstName
+							</th>
+							<th scope="col" class="px-6 py-3">
+								LastName
+							</th>
+							<th scope="col" class="px-6 py-3">
+								Contact No.
+							</th>
+							<th scope="col" class="px-6 py-3 d-flex justify-content-center">
+								Action
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"  th:each="user : ${userList}">
+							<th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+								<span th:text="${user.id}">awdawd</span>
+							</th>
+							<td class="px-6 py-4">
+								<span th:text="${user.username}">awdawd</span>
+							</td>
+							<td class="px-6 py-4">
+								<span th:text="${user.email}">awdawd</span>
+							</td>
+							<td class="px-6 py-4">
+								<span th:text="${user.firstName}">awdawd</span>
+							</td>
+							<td class="px-6 py-4">
+								<span th:text="${user.lastName}">awdawd</span>
+							</td>
+							<td class="px-6 py-4">
+								<span th:text="${user.phone}">awdawd</span>
+							</td>
+							<td class="px-6 py-4">
+								<a th:href="@{/user/deleteUserById?id=} + ${user.id}" class="font-medium d-flex justify-content-center text-blue-600 dark:text-blue-500 hover:underline">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#000000" fill="none">
+										<path d="M21 18.5C21 19.9045 21 20.6067 20.6208 21.1111C20.4567 21.3295 20.2457 21.517 20 21.6629C19.4325 22 18.6425 22 17.0625 22L6.9375 22C5.35748 22 4.56747 22 3.99997 21.6629C3.75429 21.517 3.54335 21.3295 3.37919 21.1111C3 20.6067 3 19.9045 3 18.5C3 17.0955 3 16.3933 3.37919 15.8889C3.54335 15.6705 3.75429 15.483 3.99997 15.3371C4.56747 15 5.35748 15 6.9375 15L17.0625 15C18.6425 15 19.4325 15 20 15.3371C20.2457 15.483 20.4567 15.6705 20.6208 15.8889C21 16.3933 21 17.0955 21 18.5Z" stroke="currentColor" stroke-width="1.5" />
+										<path d="M12.0625 4L6.9375 4C5.35748 4 4.56747 4 3.99997 4.33706C3.75429 4.48298 3.54335 4.67048 3.37919 4.88886C3 5.39331 3 6.09554 3 7.5C3 8.90446 3 9.60669 3.37919 10.1111C3.54335 10.3295 3.75429 10.517 3.99997 10.6629C4.56747 11 5.35748 11 6.9375 11L17.0625 11C18.6425 11 19.4325 11 20 10.6629" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+										<path d="M21 7.99936L15 2M21 2.00064L15 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+									</svg>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="container tab-content" id="order" style="display: none;">
+			<div class="relative overflow-x-auto">
+				<table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+					<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+						<tr>
+							<th scope="col" class="px-6 py-3">
+								Order ID
+							</th>
+							<th scope="col" class="px-6 py-3">
+								Order Placed
+							</th>
+							<th scope="col" class="px-6 py-3">
+								Estimated Delivered Date
+							</th>
+							<th scope="col" class="px-6 py-3">
+								Shipping Method
+							</th>
+							<th scope="col" class="px-6 py-3">
+								Total Amount
+							</th>
+							<th scope="col" class="px-6 py-3">
+								Status
+							</th>
+							<th scope="col" class="px-6 py-3">
+								Action
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" th:each="order : ${orderData}">
+							<th scope="row" class="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+								<span th:text="'#' + ${order.id}">#11141540</span>
+							</th>
+							<td class="px-6 py-4">
+								<span data-th-text="${#dates.format(order.orderDate, 'dd MMMM yyyy')}">09 July 2024</span>
+							</td>
+							<td class="px-6 py-4">
+								<span data-th-text="${#dates.format(order.shippingDate, 'dd MMMM yyyy')}">07 Aug 2024</span>
+							</td>
+							<td class="px-6 py-4">
+								<span data-th-text="${order.shippingMethod}"></span>
+							</td>
+							<td class="px-6 py-4">
+								<span data-th-text="${order.totalAmount}"></span>
+							</td>
+							<td class="px-6 py-4">
+								<div class="flex items-center">
+									<div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div>
+									<span th:text="${order.orderStatus}"></span>
+								</div>
+							</td>
+							<td class="px-6 py-4">
+								<a th:href="@{/user/deleteOrderById?id=} + ${order.id}" class="font-medium d-flex justify-content-center text-blue-600 dark:text-blue-500 hover:underline">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#000000" fill="none">
+										<path d="M21 18.5C21 19.9045 21 20.6067 20.6208 21.1111C20.4567 21.3295 20.2457 21.517 20 21.6629C19.4325 22 18.6425 22 17.0625 22L6.9375 22C5.35748 22 4.56747 22 3.99997 21.6629C3.75429 21.517 3.54335 21.3295 3.37919 21.1111C3 20.6067 3 19.9045 3 18.5C3 17.0955 3 16.3933 3.37919 15.8889C3.54335 15.6705 3.75429 15.483 3.99997 15.3371C4.56747 15 5.35748 15 6.9375 15L17.0625 15C18.6425 15 19.4325 15 20 15.3371C20.2457 15.483 20.4567 15.6705 20.6208 15.8889C21 16.3933 21 17.0955 21 18.5Z" stroke="currentColor" stroke-width="1.5" />
+										<path d="M12.0625 4L6.9375 4C5.35748 4 4.56747 4 3.99997 4.33706C3.75429 4.48298 3.54335 4.67048 3.37919 4.88886C3 5.39331 3 6.09554 3 7.5C3 8.90446 3 9.60669 3.37919 10.1111C3.54335 10.3295 3.75429 10.517 3.99997 10.6629C4.56747 11 5.35748 11 6.9375 11L17.0625 11C18.6425 11 19.4325 11 20 10.6629" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+										<path d="M21 7.99936L15 2M21 2.00064L15 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+									</svg>
+								</a>
+							</td>
+						</tr>
+					</tbody>                
+				</table>
+			</div>
+		</div>
+		
+		
+		<div class="container tab-content" id="shipping" style="display: none;">
+			<div class="relative overflow-x-auto">
+				<table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+					<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+						<tr>
+							<th scope="col" class="px-6 py-3">
+								Name
+							</th>
+							<th scope="col" class="px-6 py-3">
+								Street
+							</th>
+							<th scope="col" class="px-6 py-3">
+								Zipcode
+							</th>
+							<th scope="col" class="px-6 py-3">
+								City
+							</th>
+							<th scope="col" class="px-6 py-3">
+								State
+							</th>
+							<th scope="col" class="px-6 py-3">
+								Country
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" th:each="userShipping : ${userShippingData}">
+							<th scope="row" class="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+								<span th:text="${userShipping.userShippingName}"></span>
+							</th>
+							<td class="px-6 py-4">
+								<span th:text="${userShipping.userShippingStreet}">Nashik India</span>
+							</td>
+							<td class="px-6 py-4">
+								<span th:text="${userShipping.userShippingZipcode}">Nashik India</span>
+							</td>
+							<td class="px-6 py-4">
+								<span th:text="${userShipping.userShippingCity}">Nashik India</span>
+							</td>
+							<td class="px-6 py-4">
+								<span th:text="${userShipping.userShippingState}">Nashik India</span>
+							</td>
+							<td class="px-6 py-4">
+								<span th:text="${userShipping.userShippingCountry}">Nashik India</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+ 
+		<div class="container tab-content" id="payment" style="display: none;">
+			<div class="relative overflow-x-auto">
+				<table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+					<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+						<tr>
+							<th scope="col" class="px-6 py-3">Owner Name</th>
+							<th scope="col" class="px-6 py-3">Card Name</th>
+							<th scope="col" class="px-6 py-3">Card Number</th>
+							<th scope="col" class="px-6 py-3">CVV</th>
+							<th scope="col" class="px-6 py-3">Type</th>
+							<th scope="col" class="px-6 py-3">Expired Month</th>
+							<th scope="col" class="px-6 py-3">Expired Year</th>
+							<th scope="col" class="px-6 py-3">Default Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="userPayment : ${userPaymentData}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+							<th scope="row" class="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+								<span th:text="${userPayment.holderName}">Lorem, ipsum dolor.</span>
+							</th>
+							<td class="px-6 py-4">
+								<span th:text="${userPayment.cardName}">Lorem, ipsum dolor.</span> 
+							</td>
+							<td class="px-6 py-4">
+								<span th:text="${userPayment.cardNumber}">Lorem, ipsum dolor.</span>
+							</td>
+							<td class="px-6 py-4">
+								<span th:text="${userPayment.cvv}">Lorem, ipsum dolor.</span>
+							</td>
+							<td class="px-6 py-4">
+								<span id="typeText" th:text="${userPayment.type}">Lorem, ipsum dolor.</span>
+							</td>
+							<td class="px-6 py-4">
+								<span th:text="${userPayment.expiryMonth}">Lorem, ipsum dolor.</span>
+							</td>
+							<td class="px-6 py-4">
+								<span th:text="${userPayment.expiryYear}">Lorem, ipsum dolor.</span>
+							</td>
+							<td class="px-6 py-4">
+								<div class="flex items-center">
+									<div class="h-2.5 w-2.5 rounded-full me-2" 
+										 th:classappend="${userPayment.defaultPayment ? 'bg-green-500' : 'bg-red-500'}"></div>
+									<span th:text="${userPayment.defaultPayment ? 'Active' : 'Inactive'}"></span>
+								</div>
+							</td>							
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+	
+		
+		<div class="container tab-content" id="billing" style="display: none;">
+			<div class="relative overflow-x-auto">
+				<table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+					<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+						<tr>
+							<th scope="col" class="px-6 py-3">
+								Name
+							</th>
+							<th scope="col" class="px-6 py-3">
+								Street
+							</th>
+							<th scope="col" class="px-6 py-3">
+								Zipcode
+							</th>
+							<th scope="col" class="px-6 py-3">
+								City
+							</th>
+							<th scope="col" class="px-6 py-3">
+								State
+							</th>
+							<th scope="col" class="px-6 py-3">
+								Country
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="userBilling : ${userBillingData}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+							<th scope="row" class="px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+								<span th:text="${userBilling.userBillName}">xyz</span>
+							</th>
+							<td class="px-6 py-4">
+								<span th:text="${userBilling.street}">Lorem, ipsum dolor.</span>
+							</td>
+							<td class="px-6 py-4">
+								<span th:text="${userBilling.zipcode}">Lorem, ipsum dolor.</span>
+							</td>
+							<td class="px-6 py-4">
+								<span th:text="${userBilling.city}">Lorem, ipsum dolor.</span>
+							</td>
+							<td class="px-6 py-4">
+								<span th:text="${userBilling.state}">Lorem, ipsum dolor.</span>
+							</td>
+							<td class="px-6 py-4">
+								<span th:text="${userBilling.country}">Lorem, ipsum dolor.</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+
+
+
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://cdn.datatables.net/v/dt/dt-2.0.8/datatables.min.js"></script>
+		<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+		<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<script src="sweetalert2.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
+
+		
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				const tabs = document.querySelectorAll('.tab-link');
+				const contents = document.querySelectorAll('.tab-content');
+			
+				tabs.forEach(tab => {
+					tab.addEventListener('click', function (event) {
+						event.preventDefault();
+						const targetTab = this.getAttribute('data-tab');
+			
+						tabs.forEach(t => t.classList.remove('active'));
+						this.classList.add('active');
+			
+						contents.forEach(content => {
+							if (content.id === targetTab) {
+								content.style.display = 'block';
+							} else {
+								content.style.display = 'none';
+							}
+						});
+					});
+				});
+			});   
+			
+			
+			document.addEventListener('DOMContentLoaded', function() {
+				const spanElement = document.getElementById('typeText');
+				const maxWords = 2;
+			
+				let words = spanElement.innerText.split(' ');
+				if (words.length > maxWords) {
+					spanElement.innerText = words.slice(0, maxWords).join(' ') + '...';
+				}
+			});
+		</script>
+
+		
+	</body>
+
+</html>

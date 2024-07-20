@@ -1,0 +1,825 @@
+package com.gamestore.controller;
+
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.gamestore.domain.CartItems;
+import com.gamestore.domain.Contact;
+import com.gamestore.domain.Game;
+import com.gamestore.domain.Order;
+import com.gamestore.domain.ShoppingCart;
+import com.gamestore.domain.User;
+import com.gamestore.domain.UserBilling;
+import com.gamestore.domain.UserPayment;
+import com.gamestore.domain.UserShipping;
+import com.gamestore.domain.security.Role;
+import com.gamestore.domain.security.UserRole;
+import com.gamestore.domain.security.passwordResetToken;
+import com.gamestore.repository.PasswordResetTokenRepository;
+import com.gamestore.services.CartItemService;
+import com.gamestore.services.ContactService;
+import com.gamestore.services.GameService;
+import com.gamestore.services.OrderService;
+import com.gamestore.services.PasswordResetTokenService;
+import com.gamestore.services.UserPaymentService;
+import com.gamestore.services.UserService;
+import com.gamestore.services.UserShippingService;
+import com.gamestore.services.impl.UserSecurityService;
+import com.gamestore.utility.INDConst;
+import com.gamestore.utility.MailConstructor;
+import com.gamestore.utility.SecurityUtility;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+@Controller
+public class HomeController {
+
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private UserSecurityService userSecurityService;
+
+	@Autowired
+	private JavaMailSender mailSender;
+
+	@Autowired
+	private MailConstructor mailConstructor;
+
+	@Autowired
+	private PasswordResetTokenService passwordResetTokenService;
+
+	@Autowired
+	private PasswordResetTokenRepository passwordResetTokenRepository;
+
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+	@Autowired
+	private UserPaymentService userPaymentService;
+
+	@Autowired
+	private UserShippingService userShippingService;
+
+	@Autowired
+	private GameService gameService;
+
+	@Autowired
+	private OrderService orderService;
+
+	@Autowired
+	private CartItemService cartItemService;
+
+	@Autowired
+	private ContactService contactService;
+
+	@RequestMapping("/")
+	public String index(Model m, Principal principal) {
+		User user = new User();
+
+		ShoppingCart shoppingCart = user.getShoppingCart();
+		List<CartItems> cartItems = cartItemService.findByShoppingCart(shoppingCart);
+		m.addAttribute("gameItemList", cartItems);
+
+		m.addAttribute("user", user);
+		return "index";
+	}
+
+	@RequestMapping("/header")
+	public String header(Model m, Principal principal) {
+		User user = userService.findByUsername(principal.getName());
+
+		ShoppingCart shoppingCart = user.getShoppingCart();
+		List<CartItems> cartItems = cartItemService.findByShoppingCart(shoppingCart);
+		m.addAttribute("gameItemList", cartItems);
+
+		m.addAttribute("user", user);
+		return "header";
+	}
+
+	@RequestMapping("/Account")
+	public String Account() {
+		return "account";
+	}
+
+	@RequestMapping("/searchGame")
+	public String searchGameBySerachBar(Model m, Principal principal,
+			@ModelAttribute("searchGameByName") String keyword) {
+
+		if (principal != null) {
+			User user = userService.findByUsername(principal.getName());
+			m.addAttribute("user", user);
+		}
+
+		List<Game> gameList = gameService.findGameByTitle(keyword);
+
+		if (gameList.isEmpty()) {
+			m.addAttribute("noSuchGamePresent", true);
+		}
+
+		m.addAttribute("gameList", gameList);
+
+		return "shop";
+
+	}
+
+	@GetMapping("/contact")
+	public String contact(Model m, Principal principal) {
+		User user = userService.findByUsername(principal.getName());
+		m.addAttribute("user", user);
+		return "contact";
+	}
+
+	@PostMapping("/contactFormSubmit")
+	public String contactFormSubmit(Model m, Principal principal, @RequestParam("userId") Long userId,
+			@RequestParam("username") String username, @RequestParam("email") String email,
+			@RequestParam("msg") String msg) {
+		User user = userService.findByOne(userId);
+		if (user == null) {
+			return "error404";
+		}
+
+		Contact contact = new Contact();
+		contact.setUsername(name);
+		contact.setEmail(email);
+		contact.setUserQuerys(msg);
+		contact.setUser(user);
+		contactService.save(contact);
+		
+		SimpleMailMessage mail = mailConstructor.contactMailSend(name, email, msg, user);
+		
+		
+		m.addAttribute("messageSend",true);
+		m.addAttribute("user", user);
+		return "contact";
+	}
+
+	@RequestMapping("/MyProfile")
+	public String Profile(Model m, Principal principal) {
+		User user = userService.findByUsername(principal.getName());
+		m.addAttribute("user", user);
+
+		if (user.getPhone() == null || user.getPhone().isEmpty()) {
+			m.addAttribute("incompleteUserData", true);
+		} else {
+			m.addAttribute("incompleteUserData", false);
+		}
+
+		ShoppingCart shoppingCart = user.getShoppingCart();
+		List<CartItems> cartItems = cartItemService.findByShoppingCart(shoppingCart);
+		m.addAttribute("gameItemList", cartItems);
+
+		m.addAttribute("userPaymentData", user.getUserPaymentList());
+
+		List<String> stateList = INDConst.stateCode;
+		Collections.sort(stateList);
+		m.addAttribute("stateList", stateList);
+		m.addAttribute("classActiveEdit", true);
+
+		return "/Profile/MyProfile";
+	}
+
+	@RequestMapping("/EditProfile")
+	public String editProfile(Model m, Principal principal) {
+		User user = userService.findByUsername(principal.getName());
+		m.addAttribute("user", user);
+		if (user.getPhone() == null || user.getPhone().isEmpty()) {
+			m.addAttribute("incompleteUserData", true);
+		} else {
+			m.addAttribute("incompleteUserData", false);
+		}
+
+		ShoppingCart shoppingCart = user.getShoppingCart();
+		List<CartItems> cartItems = cartItemService.findByShoppingCart(shoppingCart);
+		m.addAttribute("gameItemList", cartItems);
+
+		return "/Profile/EditProfile";
+	}
+
+	@GetMapping("/Billing")
+	public String billing(Model m, Principal principal) {
+		User user = userService.findByUsername(principal.getName());
+		m.addAttribute("user", user);
+
+		if (user.getPhone() == null || user.getPhone().isEmpty()) {
+			m.addAttribute("incompleteUserData", true);
+		} else {
+			m.addAttribute("incompleteUserData", false);
+		}
+
+		if (user.getUserPaymentList().isEmpty()) {
+			m.addAttribute("noMorePaymemtData", true);
+		}
+
+		ShoppingCart shoppingCart = user.getShoppingCart();
+		List<CartItems> cartItems = cartItemService.findByShoppingCart(shoppingCart);
+		m.addAttribute("gameItemList", cartItems);
+
+		m.addAttribute("userPaymentList", user.getUserPaymentList());
+		m.addAttribute("userShippingList", user.getUserShippingList());
+		m.addAttribute("orderList", user.getOrderList());
+
+		m.addAttribute("listOfCreditCard", true);
+		m.addAttribute("billingFileOpen", true);
+
+		m.addAttribute("listOfShippingAddress", true);
+		return "/Profile/Billing";
+	}
+
+	@RequestMapping("/addNewCreditCard")
+	public String updateBill(Model m, Principal principal) {
+		User user = userService.findByUsername(principal.getName());
+		m.addAttribute("user", user);
+
+		UserBilling userBilling = new UserBilling();
+		UserPayment userPayment = new UserPayment();
+
+		m.addAttribute("userBilling", userBilling);
+		m.addAttribute("userPayment", userPayment);
+
+		if (user.getPhone() == null || user.getPhone().isEmpty()) {
+			m.addAttribute("incompleteUserData", true);
+		} else {
+			m.addAttribute("incompleteUserData", false);
+		}
+
+		List<Map.Entry<String, String>> sortedStates = INDConst.indiaStates.entrySet().stream()
+				.sorted(Map.Entry.comparingByValue()).collect(Collectors.toList());
+
+		m.addAttribute("stateList", sortedStates);
+
+		m.addAttribute("userPaymentList", user.getUserPaymentList());
+		m.addAttribute("userShippingList", user.getUserShippingList());
+
+		ShoppingCart shoppingCart = user.getShoppingCart();
+		List<CartItems> cartItems = cartItemService.findByShoppingCart(shoppingCart);
+		m.addAttribute("gameItemList", cartItems);
+
+		m.addAttribute("CreditPageOpen", true);
+		m.addAttribute("addNewCreditCard", true);
+		m.addAttribute("listOfCreditCard", true);
+		m.addAttribute("listOfShippingAddress", true);
+		m.addAttribute("classActiveEdit", true);
+
+		return "/Profile/AddBilling";
+	}
+
+	@PostMapping("/addNewCreditCard")
+	public String addNewCreditCard(@ModelAttribute("userPayment") UserPayment userPayment,
+			@ModelAttribute("userBilling") UserBilling userBilling, Principal principal, Model m) {
+
+		User user = userService.findByUsername(principal.getName());
+		m.addAttribute("user", user);
+		userService.updateUserBilling(userPayment, userBilling, user);
+
+		if (user.getPhone() == null || user.getPhone().isEmpty()) {
+			m.addAttribute("incompleteUserData", true);
+		} else {
+			m.addAttribute("incompleteUserData", false);
+		}
+
+		ShoppingCart shoppingCart = user.getShoppingCart();
+		List<CartItems> cartItems = cartItemService.findByShoppingCart(shoppingCart);
+		m.addAttribute("gameItemList", cartItems);
+
+		m.addAttribute("userPaymentList", user.getUserPaymentList());
+		m.addAttribute("userShippingList", user.getUserShippingList());
+		m.addAttribute("classActiveEdit", true);
+		return "/Profile/Billing";
+	}
+
+	@RequestMapping("/updateCreditCard")
+	public String updateCreditCards(@ModelAttribute("id") Long cardId, Model m, Principal principal) {
+		User user = userService.findByUsername(principal.getName());
+		UserPayment userPayment = userPaymentService.findById(cardId);
+
+		if (user.getId() != userPayment.getUser().getId()) {
+			return "redirect:/badRequest";
+		} else {
+			UserBilling userBilling = userPayment.getUserBilling();
+			m.addAttribute("user", user);
+			m.addAttribute("userBilling", userBilling);
+			m.addAttribute("userPayment", userPayment);
+
+			List<Map.Entry<String, String>> sortedStates = INDConst.indiaStates.entrySet().stream()
+					.sorted(Map.Entry.comparingByValue()).collect(Collectors.toList());
+
+			m.addAttribute("stateList", sortedStates);
+
+			m.addAttribute("userPaymentList", user.getUserPaymentList());
+			m.addAttribute("userShippingList", user.getUserShippingList());
+
+			if (user.getPhone() == null || user.getPhone().isEmpty()) {
+				m.addAttribute("incompleteUserData", true);
+			} else {
+				m.addAttribute("incompleteUserData", false);
+			}
+
+			ShoppingCart shoppingCart = user.getShoppingCart();
+			List<CartItems> cartItems = cartItemService.findByShoppingCart(shoppingCart);
+			m.addAttribute("gameItemList", cartItems);
+
+			m.addAttribute("CreditPageOpen", true);
+			m.addAttribute("addNewCreditCard", true);
+			m.addAttribute("listOfCreditCard", true);
+			m.addAttribute("listOfShippingAddress", true);
+			m.addAttribute("classActiveEdit", true);
+
+			return "/Profile/AddBilling";
+		}
+
+	}
+
+	@RequestMapping("/removeCreditCard")
+	public String deleteCreditCard(Model m, @RequestParam("id") Long id, Principal principal) {
+		User user = userService.findByUsername(principal.getName());
+		m.addAttribute("user", user);
+		userPaymentService.removeById(id);
+		return "redirect:/Billing";
+	}
+
+	@RequestMapping("/setDefaultCard")
+	public String setDefaultCreditCard(@ModelAttribute("defaultUserPaymentId") Long paymentId, Principal principal,
+			Model m) {
+		User user = userService.findByUsername(principal.getName());
+		userService.setUserDefaultOperation(paymentId, user);
+
+		ShoppingCart shoppingCart = user.getShoppingCart();
+		List<CartItems> cartItems = cartItemService.findByShoppingCart(shoppingCart);
+		m.addAttribute("gameItemList", cartItems);
+
+		m.addAttribute("user", user);
+		m.addAttribute("userPaymentList", user.getUserPaymentList());
+		m.addAttribute("userShippingList", user.getUserShippingList());
+		m.addAttribute("classActiveEdit", true);
+
+		return "/Profile/Billing";
+
+	}
+
+	@RequestMapping("/Shipping")
+	public String shippingData(Model m, Principal principal) {
+
+		User user = userService.findByUsername(principal.getName());
+		m.addAttribute("user", user);
+		m.addAttribute("userShippingList", user.getUserShippingList());
+
+		ShoppingCart shoppingCart = user.getShoppingCart();
+		List<CartItems> cartItems = cartItemService.findByShoppingCart(shoppingCart);
+		m.addAttribute("gameItemList", cartItems);
+
+		if (user.getUserShippingList().isEmpty()) {
+			m.addAttribute("noMoreShippingData", true);
+		}
+
+		if (user.getPhone() == null || user.getPhone().isEmpty()) {
+			m.addAttribute("incompleteUserData", true);
+		} else {
+			m.addAttribute("incompleteUserData", false);
+		}
+
+		m.addAttribute("listOfShippingCards", true);
+		m.addAttribute("openShippingPage", true);
+		m.addAttribute("listOfShippingAddress", true);
+
+		return "/Profile/Shipping";
+	}
+
+	@RequestMapping("/addNewShipping")
+	public String showEditShippingPage(Model m, Principal principal) {
+
+		User user = userService.findByUsername(principal.getName());
+		m.addAttribute("user", user);
+
+		UserShipping userShipping = new UserShipping();
+		m.addAttribute("userShipping", userShipping);
+
+		List<String> stateList = INDConst.stateCode;
+		Collections.sort(stateList);
+		m.addAttribute("stateList", stateList);
+
+		m.addAttribute("userShippingList", user.getUserShippingList());
+		m.addAttribute("userPaymentList", user.getUserPaymentList());
+
+		m.addAttribute("openEditShippingPage", true);
+		m.addAttribute("classActiveShipping", true);
+		m.addAttribute("listOfShippingCards", true);
+		return "/Profile/EditShipping";
+	}
+
+	@PostMapping("/submitShippingInfo")
+	public String addNewShippingDetails(@ModelAttribute("userShpping") UserShipping userShipping, Principal principal,
+			Model m) {
+
+		User user = userService.findByUsername(principal.getName());
+		userService.addShippingDetails(userShipping, user);
+
+		ShoppingCart shoppingCart = user.getShoppingCart();
+		List<CartItems> cartItems = cartItemService.findByShoppingCart(shoppingCart);
+		m.addAttribute("gameItemList", cartItems);
+
+		m.addAttribute("user", user);
+		m.addAttribute("userShippingList", user.getUserShippingList());
+		m.addAttribute("openShippingPage", true);
+		m.addAttribute("classActiveEdit", true);
+		return "/Profile/Shipping";
+	}
+
+	@RequestMapping("/updateShippingAddress")
+	public String updateShippingAddress(@ModelAttribute("id") Long id, Model m, Principal principal) {
+		User user = userService.findByUsername(principal.getName());
+		UserShipping userShipping = userShippingService.findById(id);
+
+		if (user.getId() != userShipping.getUser().getId()) {
+			return "redirect:/badRequest";
+		} else {
+			m.addAttribute("user", user);
+			m.addAttribute("userShipping", userShipping);
+
+			ShoppingCart shoppingCart = user.getShoppingCart();
+			List<CartItems> cartItems = cartItemService.findByShoppingCart(shoppingCart);
+			m.addAttribute("gameItemList", cartItems);
+
+			List<String> stateList = INDConst.stateCode;
+			Collections.sort(stateList);
+			m.addAttribute("stateList", stateList);
+
+			m.addAttribute("userShippingList", user.getUserShippingList());
+			m.addAttribute("userPaymentList", user.getUserPaymentList());
+
+			m.addAttribute("openEditShippingPage", true);
+			m.addAttribute("classActiveShipping", true);
+			m.addAttribute("listOfShippingCards", true);
+			return "/Profile/EditShipping";
+		}
+	}
+
+	@RequestMapping("/removeShippingAddress")
+	public String deleteShippingAddress(@ModelAttribute("id") Long id, Principal principal, Model m) {
+		User user = userService.findByUsername(principal.getName());
+		UserShipping userShipping = userShippingService.findById(id);
+		if (user.getId() != userShipping.getUser().getId()) {
+			return "redirect:/badRequest";
+		} else {
+			userShippingService.removeById(id);
+
+			m.addAttribute("user", user);
+			m.addAttribute("userShippingList", user.getUserShippingList());
+
+			m.addAttribute("listOfShippingCards", true);
+			m.addAttribute("openShippingPage", true);
+			m.addAttribute("listOfShippingAddress", true);
+			return "redirect:/Shipping";
+		}
+	}
+
+//	@GetMapping("/Order")
+//	public String orderData(Model m, Principal principal) {
+//		User user = userService.findByUsername(principal.getName());
+//		m.addAttribute("user", user);
+//    	m.addAttribute("orderData" , user.getOrderList());
+//		
+//		List<CartItems> cartItemList = cartItemService.findByOrder(order);
+//
+//		 
+//		List<String> stateList = INDConst.stateCode;
+//		Collections.sort(stateList);
+//		m.addAttribute("stateList", stateList);
+//		
+//		
+//		m.addAttribute("userPaymentList", user.getUserPaymentList());
+//		m.addAttribute("userShippingList", user.getUserShippingList());		
+//		m.addAttribute("user", user);
+//		m.addAttribute("orders", order);
+//		m.addAttribute("cartItemList", cartItemList);
+//		m.addAttribute("orderData" , user.getOrderList());
+//		return "/Profile/Order";
+//	}
+
+	@GetMapping("/Order")
+	public String showOrders(Model m, Principal principal) {
+		User user = userService.findByUsername(principal.getName());
+		List<Order> orderList = user.getOrderList();
+		if (orderList.isEmpty()) {
+			m.addAttribute("noOrderMore", true);
+		}
+
+		ShoppingCart shoppingCart = user.getShoppingCart();
+		List<CartItems> cartItems = cartItemService.findByShoppingCart(shoppingCart);
+		m.addAttribute("gameItemList", cartItems);
+
+		m.addAttribute("userPaymentList", user.getUserPaymentList());
+		m.addAttribute("userShippingList", user.getUserShippingList());
+		m.addAttribute("user", user);
+		m.addAttribute("orderData", user.getOrderList());
+		m.addAttribute("orderData", orderList);
+		return "/Profile/Order";
+	}
+
+	@RequestMapping("/orderDetail")
+	public String orderDetail(Model m, Principal principal, @RequestParam("id") Long orderId) {
+		User user = userService.findByUsername(principal.getName());
+		Order order = orderService.findById(orderId);
+
+		if (order.getUser().getId() != user.getId()) {
+			return "badRequest";
+		} else {
+			List<CartItems> cartItemList = cartItemService.findByOrder(order);
+
+			List<String> stateList = INDConst.stateCode;
+			Collections.sort(stateList);
+			m.addAttribute("stateList", stateList);
+
+			ShoppingCart shoppingCart = user.getShoppingCart();
+			List<CartItems> cartItems = cartItemService.findByShoppingCart(shoppingCart);
+			m.addAttribute("gameItemList", cartItems);
+
+			m.addAttribute("userPaymentList", user.getUserPaymentList());
+			m.addAttribute("userShippingList", user.getUserShippingList());
+			m.addAttribute("user", user);
+			m.addAttribute("order", order);
+			m.addAttribute("cartItemList", cartItemList);
+			m.addAttribute("orderData", user.getOrderList());
+
+			return "/Profile/OrderDetails";
+		}
+	}
+
+	@PostMapping("/updateUserInfo")
+	public String updateUserInfo(@ModelAttribute User user, Model m, @RequestParam("cpassword") String currentPassword,
+			@RequestParam("confirmpassword") String confirmPassword, @RequestParam("password") String password,
+			Principal principal) {
+
+		User existingPassword = userService.findByUsername(principal.getName());
+
+		if (!bCryptPasswordEncoder.matches(currentPassword, existingPassword.getPassword())) {
+			m.addAttribute("invalidCurrentPassword", true);
+			return "/Profile/EditProfile";
+		}
+
+		if (!password.equals(confirmPassword)) {
+			m.addAttribute("passwordAndConfirmPasswordNotSame", true);
+			return "/Profile/EditProfile";
+		}
+
+		userService.updateUser(user);
+		return "redirect:/MyProfile?successfulUpdateInfo=true";
+	}
+
+	@RequestMapping("/login")
+	public String login(Model m) {
+		m.addAttribute("classActiveLogin", true);
+		return "login";
+	}
+
+	@RequestMapping("/shop")
+	public String shop(Model m, Principal principal) {
+		User user = userService.findByUsername(principal.getName());
+		m.addAttribute("user", user);
+		List<Game> gameData = gameService.findAll();
+
+		ShoppingCart shoppingCart = user.getShoppingCart();
+		List<CartItems> cartItems = cartItemService.findByShoppingCart(shoppingCart);
+		m.addAttribute("gameItemList", cartItems);
+
+		if (gameData.isEmpty()) {
+			m.addAttribute("emptyShop", true);
+		}
+		if (user.getPhone() == null || user.getPhone().isEmpty()) {
+			m.addAttribute("incompleteUserData", true);
+		} else {
+			m.addAttribute("incompleteUserData", false);
+		}
+
+		m.addAttribute("gameData", gameData);
+		return "shop";
+	}
+
+	@GetMapping("/forgetPassword")
+	public String forgetMail() {
+		return "forget";
+	}
+
+	@RequestMapping("/forgetPassword")
+	public String forgetPassword(HttpServletRequest request, @ModelAttribute("email") String email, Model m) {
+		m.addAttribute("classActiveForgetPassword", true);
+		User user = userService.findByEmail(email);
+		if (user == null) {
+			m.addAttribute("incorrectEmail", true);
+			return "forget";
+		}
+
+		// Check if a token already exists for the user
+		passwordResetToken existingToken = passwordResetTokenService.findByUser(user);
+
+		String password = SecurityUtility.randomPassword();
+		String encryptionPassword = SecurityUtility.passwordEncoder().encode(password);
+		user.setPassword(encryptionPassword);
+		String usernameSentToEmail = user.getUsername();
+		userService.save(user);
+
+		String token;
+		if (existingToken != null) {
+			// If a token exists, update it
+			token = existingToken.getToken();
+			existingToken.updateToken(token);
+		} else {
+			// If no token exists, create a new one
+			token = UUID.randomUUID().toString();
+			passwordResetToken newToken = new passwordResetToken(token, user);
+			passwordResetTokenRepository.save(newToken);
+		}
+
+		String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+
+		SimpleMailMessage forgetEmail = mailConstructor.constructResetTokenEmail(appUrl, request.getLocale(), token,
+				user, password, usernameSentToEmail);
+
+		if (forgetEmail != null) {
+			mailSender.send(forgetEmail);
+		} else {
+			throw new IllegalArgumentException("Email could not be constructed");
+		}
+
+		m.addAttribute("forgetEmailPasswordSend", true);
+
+		return "login";
+	}
+
+	@GetMapping("/newUser")
+	public String newAccount() {
+		return "register";
+	}
+
+	@GetMapping("/productsImages")
+	public String productsOnly(Model m, Principal principal) {
+		User user = userService.findByUsername(principal.getName());
+		List<Game> gameData = gameService.findAll();
+		if (gameData == null) {
+			m.addAttribute("emptyShop", true);
+		}
+		m.addAttribute("user", user);
+		m.addAttribute("gameData", gameData);
+
+		return "Products";
+	}
+
+	@RequestMapping("/newUser")
+	public String newUserPost(HttpServletRequest request, @ModelAttribute("email") String userEmail,
+			@ModelAttribute("username") String username, @ModelAttribute("address") String address, Model m)
+			throws Exception {
+
+		m.addAttribute("classActiveNewAccount", true);
+		m.addAttribute("email", userEmail);
+		m.addAttribute("username", username);
+		m.addAttribute("address", address);
+
+		if (userService.findByUsername(username) != null) {
+			m.addAttribute("usernameExists", true);
+			return "register";
+		}
+		if (userService.findByEmail(userEmail) != null) {
+			m.addAttribute("emailExists", true);
+			return "register";
+		}
+
+		User user = new User();
+		user.setUsername(username);
+		user.setEmail(userEmail);
+		user.setAddress(address);
+
+		String password = SecurityUtility.randomPassword();
+		String encryptedPassword = SecurityUtility.passwordEncoder().encode(password);
+		user.setPassword(encryptedPassword);
+
+		Role role = new Role();
+		role.setRoleId(1);
+		role.setName("ROLE_USER");
+		Set<UserRole> userRoles = new HashSet<>();
+		userRoles.add(new UserRole(user, role));
+		userService.createUser(user, userRoles);
+
+		String token = UUID.randomUUID().toString();
+		passwordResetTokenService.createPasswordResetTokenForUser(user, token);
+
+		String usernameSent = user.getUsername();
+
+		String appUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+
+		SimpleMailMessage email = mailConstructor.constructResetTokenEmail(appUrl, request.getLocale(), token, user,
+				password, usernameSent);
+
+		if (email != null) {
+			mailSender.send(email);
+		} else {
+			throw new IllegalArgumentException("Email could not be constructed");
+		}
+
+		m.addAttribute("emailSent", "true");
+
+		return "login";
+	}
+
+	@RequestMapping("/verify")
+	public String verifyUser(Locale locale, @RequestParam("token") String token, Model m) {
+		passwordResetToken passToken = passwordResetTokenService.findByToken(token);
+
+		if (passToken == null) {
+			String message = "Oops! Invalid Token";
+			m.addAttribute("message", message);
+			return "redirect:/badRequest";
+		}
+
+		User user = passToken.getUser();
+		String username = user.getUsername();
+		UserDetails userDetails = userSecurityService.loadUserByUsername(username);
+		Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(),
+				userDetails.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		m.addAttribute("user", user);
+		m.addAttribute("classActiveEdit", true);
+		return "/Profile/EditProfile";
+	}
+
+	// Single Product page.
+
+	@RequestMapping("/gameDetail")
+	public String GameDetails(@RequestParam("id") Long id, Model m, Principal principal) {
+		User user = userService.findByUsername(principal.getName());
+		Game game = gameService.findOne(id);
+		m.addAttribute("game", game);
+		List<Integer> quantities = new ArrayList<>();
+		for (int i = 1; i < game.getStockAvailable(); i++) {
+			quantities.add(i);
+		}
+		m.addAttribute("quantities", quantities);
+
+		m.addAttribute("user", user);
+		ShoppingCart shoppingCart = user.getShoppingCart();
+		List<CartItems> cartItems = cartItemService.findByShoppingCart(shoppingCart);
+		m.addAttribute("gameItemList", cartItems);
+
+		return "Singlepage";
+	}
+
+	// Legal
+
+	@GetMapping("Privacy-Policy")
+	public String privavyPolicy(Model m) {
+		User user = new User();
+		m.addAttribute("user", user);
+		return "/legal/Privacy_Policy";
+	}
+
+	@GetMapping("/FAQ")
+	public String faq(Model m) {
+		User user = new User();
+		m.addAttribute("user", user);
+		return "/legal/FAQ";
+	}
+
+	@GetMapping("/AboutUs")
+	public String AboutUs(Model m) {
+		User user = new User();
+		m.addAttribute("user", user);
+		return "/legal/AboutUs";
+	}
+
+	@GetMapping("/Term-and-Condition")
+	public String tNQ(Model m) {
+		User user = new User();
+		m.addAttribute("user", user);
+		return "/legal/Term_Condition";
+	}
+
+	@GetMapping("/PaymentTerms")
+	public String payment(Model m) {
+		User user = new User();
+		m.addAttribute("user", user);
+		return "/legal/Payments";
+	}
+}

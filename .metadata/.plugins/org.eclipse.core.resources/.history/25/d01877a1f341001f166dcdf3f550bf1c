@@ -1,0 +1,20 @@
+package com.adminportal.sevices.impl;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.adminportal.domain.Order;
+import com.adminportal.sevices.OrderService;
+
+@Service
+public class OrderServiceImpl implements OrderService{
+
+	@Autowired
+	private OrderServiceRepository orderServiceRepository;
+	
+	public List<Order> findAll(){
+		return orderServiceRepository.
+	}
+	
+}

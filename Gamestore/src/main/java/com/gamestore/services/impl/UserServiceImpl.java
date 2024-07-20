@@ -1,0 +1,173 @@
+package com.gamestore.services.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service; 
+import org.springframework.transaction.annotation.Transactional;
+
+import com.gamestore.domain.ShoppingCart;
+import com.gamestore.domain.User;
+import com.gamestore.domain.UserBilling;
+import com.gamestore.domain.UserPayment;
+import com.gamestore.domain.UserShipping; 
+import com.gamestore.domain.security.UserRole;
+import com.gamestore.domain.security.passwordResetToken;
+import com.gamestore.repository.PasswordResetTokenRepository;
+import com.gamestore.repository.RoleRepository;
+import com.gamestore.repository.ShoppingCartRepository;
+import com.gamestore.repository.UserPaymentRepository;
+import com.gamestore.repository.UserRepository;
+import com.gamestore.repository.UserRoleRepository;
+import com.gamestore.services.UserService;
+import com.gamestore.utility.SecurityUtility;
+
+@Service
+public class UserServiceImpl implements UserService {
+
+	private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
+
+	@Autowired
+	PasswordResetTokenRepository passwordResetTokenRepository;
+
+	@Autowired
+	private UserPaymentRepository userPaymentRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private RoleRepository roleRepository;
+
+	@Autowired
+	private UserRoleRepository userRoleRepository;
+
+	@Autowired
+	private ShoppingCartRepository shoppingCartRepository;
+
+	@Override
+	public passwordResetToken getPasswordResetToken(final String token) {
+		return passwordResetTokenRepository.findByToken(token);
+	}
+
+	@Override
+	public void createPasswordResetTokenForUser(final User user, final String token) {
+		final passwordResetToken ourToken = new passwordResetToken(token, user);
+		passwordResetTokenRepository.save(ourToken);
+	}
+
+	@Override
+	public User findByUsername(String username) {
+		return userRepository.findByUsername(username);
+	}
+
+	@Override
+	public User findByEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
+
+	@Override
+	public User findByAddress(String address) {
+		return userRepository.findByAddress(address);
+	}
+
+	@Override
+	@Transactional
+	public User createUser(User user, Set<UserRole> userRoles){
+		User localUser = userRepository.findByUsername(user.getUsername());
+		
+		if(localUser != null) {
+			LOG.info("user {} already exists. Nothing will be done.", user.getUsername());
+		} else {
+			for (UserRole ur : userRoles) {
+				roleRepository.save(ur.getRole());
+			}
+			
+			user.getUserRole().addAll(userRoles);
+			
+			ShoppingCart shoppingCart = new ShoppingCart();
+			shoppingCart.setUser(user);
+			user.setShoppingCart(shoppingCart);
+			
+			user.setUserShippingList(new ArrayList<UserShipping>());
+			user.setUserPaymentList(new ArrayList<UserPayment>());
+			
+			localUser = userRepository.save(user);
+		}
+		
+		return localUser;
+	}
+	
+	
+
+	@Override
+	public User save(User user) {
+		return userRepository.save(user);
+	}
+
+	@Override
+	public void updateUser(User updatedUser) {
+		if (updatedUser.getId() == null) {
+			throw new RuntimeException("User ID is missing");
+		}
+
+		User avlUser = userRepository.findById(updatedUser.getId())
+				.orElseThrow(() -> new RuntimeException("User not found"));
+
+		avlUser.setFirstName(updatedUser.getFirstName());
+		avlUser.setLastName(updatedUser.getLastName());
+		avlUser.setUsername(updatedUser.getUsername());
+		avlUser.setEmail(updatedUser.getEmail());
+		avlUser.setAddress(updatedUser.getAddress());
+		avlUser.setPhone(updatedUser.getPhone());
+
+		if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+			avlUser.setPassword(SecurityUtility.passwordEncoder().encode(updatedUser.getPassword()));
+		}
+
+		userRepository.save(avlUser);
+	}
+
+	@Override
+	public void updateUserBilling(UserPayment userPayment, UserBilling userBilling, User user) {
+		userPayment.setUser(user);
+		userPayment.setUserBilling(userBilling);
+		userPayment.setDefaultPayment(true);
+		userBilling.setUserPayment(userPayment);
+		user.getUserPaymentList().add(userPayment);
+		save(user);
+	}
+
+	@Override
+	public void addShippingDetails(UserShipping userShipping, User user) {
+		userShipping.setUser(user);
+		userShipping.setUserShippingDefault(true);
+		user.getUserShippingList().add(userShipping);
+		save(user);
+	}
+
+	@Override
+	public void setUserDefaultOperation(Long paymentId, User user) {
+		List<UserPayment> userPaymentList = user.getUserPaymentList();
+		for (UserPayment userPayment : userPaymentList) {
+			if (userPayment.getId().equals(paymentId)) {
+				userPayment.setDefaultPayment(true);
+			} else {
+				userPayment.setDefaultPayment(false);
+			}
+			userPaymentRepository.save(userPayment);
+		}
+	}
+
+	@Override
+	public User findByOne(Long id) {
+		
+		return userRepository.findById(id).orElse(null);
+	}
+
+	
+}

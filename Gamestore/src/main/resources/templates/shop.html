@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- <head th:insert="~{header::common-header}"> -->
+
+<head>
+	<!-- <meta http-equiv="refresh" content="15"> -->
+	<link rel="website icon" type="png" href="/images/game-store-logo.png" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+	<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+	<link href="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.css" rel="stylesheet" />
+	<link href="/css/shop.css" rel="stylesheet" />
+</head>
+
+<body class="account-body">
+	<header th:insert="~{header::header}"></header>
+    
+	<section class="heading container">
+		<div class="row">
+			<div class="col-md-8">
+				<h1 class="text-5xl">Best Selling product</h1>
+				<h6 class="text-2xl">Buy every product which low price and chip prices</h6>
+			</div>
+		</div>
+
+
+		<div class="row shop-search-bar">
+			<div class="col-md-4 d-flex justify-content-center">
+			  <button id="dropdownHoverButton2" data-dropdown-toggle="dropdownHover2" data-dropdown-trigger="hover" class="bg-white text-gray-900 w-100 d-flex justify-center border hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Sort Games
+				<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+				  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+				</svg>
+			  </button>
+		  
+			  <div id="dropdownHover2" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-96 dark:bg-gray-700">
+				<ul class="py-2 text-sm text-gray-700 dark:text-gray-200 w-100" aria-labelledby="dropdownHoverButton2">
+				  <li class="w-100">
+					<a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" id="sort-all">All</a>
+				  </li>
+				  <li class="w-100">
+					<a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" id="sort-high-to-low">Price: High To Low</a>
+				  </li>
+				  <li class="w-100">
+					<a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" id="sort-low-to-high">Price: Low To High</a>
+				  </li>
+				</ul>
+			  </div>
+			</div>
+		  
+			<div class="col-md-8">
+				<form th:action="@{/searchGame}" method="post" class="search-form">
+				  <div class="search-container">
+					<input type="text" name="searchGameByName" placeholder="Search Product You want...">
+					<button type="submit" class="search-icon" style="display:none;"><i class="fa-solid fa-magnifying-glass"></i></button>
+				  </div>
+				</form>
+			  </div>			  
+		  </div>
+
+		  
+	</section>
+
+	<div th:if="${emptyShop}" class="container mx-auto mt-5">
+		<div class="bg-red-100 border-l-4 border-yellow-100 text-black-700 p-4" role="alert">
+			<p class="text-2xl mb-2 font-medium">Sorry ! <span class="mx-3" th:text="${user.username}"></span></p>
+			<p class="text-xl">
+				There are no products are available right now. For more Information, Please reach out to admin in <a th:href="@{/contact}">Here</a>. 
+			</p>
+		</div>
+	</div>
+
+	<!-- Show Game List By Searching -->
+	<section id="gameData" class="special">
+		<div class="feature-container container">
+			<div class="feature" data-th-each="gameBySearch : ${gameList}">
+				<a th:href="@{/gameDetail?id=} + ${gameBySearch.id}">
+					<img th:src="@{'http://localhost:5001/images/Games/' + ${gameBySearch.id} + '.jpg'}" />
+					<div class="data">
+						<span>
+							<h4 th:text="${gameBySearch.title}">
+								</h5>
+						</span>
+						<br>
+						<span class="star-rating">
+							<span th:each="i, iterStat : ${#numbers.sequence(1, gameBySearch.starRating)}">
+								<span class="fa fa-star"></span>
+								<span>&nbsp;</span>
+							</span>
+						</span>
+
+						<p th:text="${#strings.abbreviate(gameBySearch.description, 100)}">
+						</p>
+						<h5 class="ourprice" style="font-size:x-large;color:#db3208;">
+							<span class="offer" th:text="${gameBySearch.off}"></span><span class="offer-mod">%</span>
+							<p class="rs">₹<span class="ourprices" th:text="${#numbers.formatDecimal(gameBySearch.ourPrice, 0 , 'COMMA', 2, 'POINT')}"></span></p>
+						</h5>
+
+						<h4 class="listprice">₹<span
+								th:text="${#numbers.formatDecimal(gameBySearch.listPrice, 0 , 'COMMA', 2, 'POINT')}"></span>
+						</h4>
+					</div>
+				</a>
+			</div>
+		</div>
+	</section>
+
+
+	<!-- Game Data -->
+	 
+	<section id="gameData" class="special">
+		<div class="feature-container container">
+			<div class="feature" data-th-each="game : ${gameData}">
+				<a th:href="@{/gameDetail?id=} + ${game.id}">
+					<img th:src="@{'http://localhost:5001/images/Games/' + ${game.id} + '.jpg'}" />
+					<div class="data">
+						<span>
+							<h4 th:text="${game.title}">
+								</h5>
+						</span>
+						<br>
+						<span class="star-rating">
+							<span th:each="i, iterStat : ${#numbers.sequence(1, game.starRating)}">
+								<span class="fa fa-star"></span>
+								<span>&nbsp;</span>
+							</span>
+						</span>
+
+						<p th:text="${#strings.abbreviate(game.description, 100)}">
+						</p>
+						<h5 class="ourprice" style="font-size:x-large;color:#db3208;">
+							<span class="offer" th:text="${game.off}"></span><span class="offer-mod">%</span>
+							<p class="rs">₹<span class="ourprices" th:text="${#numbers.formatDecimal(game.ourPrice, 0 , 'COMMA', 2, 'POINT')}"></span></p>
+						</h5>
+
+						<h4 class="listprice">₹<span
+								th:text="${#numbers.formatDecimal(game.listPrice, 0 , 'COMMA', 2, 'POINT')}"></span>
+						</h4>
+					</div>
+				</a>
+			</div>
+		</div>
+	</section>
+
+
+	<footer th:replace="~{index::footer}"></footer>
+
+	<!-- Script Section -->
+	<div th:replace="~{header::scripts}"></div>
+
+	<script>
+		const inputField = document.querySelector('.search-container input');
+		const searchIcon = document.querySelector('.search-icon');
+
+		inputField.addEventListener('input', function() {
+			if (inputField.value.trim() !== '') {
+			searchIcon.style.display = 'block';
+			} else {
+			searchIcon.style.display = 'none';
+			}
+		});
+	</script>
+
+	<script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+
+	<script>
+		$(document).ready(function() {
+			$('#sort-high-to-low').click(function(e) {
+				e.preventDefault();
+				sortGames('desc');
+			});
+		
+			$('#sort-low-to-high').click(function(e) {
+				e.preventDefault();
+				sortGames('asc');
+			});
+		
+			function sortGames(order) {
+				var $games = $('.feature').get();
+				$games.sort(function(a, b) {
+					var priceA = parseFloat($(a).find('.ourprices').text().replace(/,/g, ''));
+					var priceB = parseFloat($(b).find('.ourprices').text().replace(/,/g, ''));
+					return (order === 'asc') ? priceA - priceB : priceB - priceA;
+				});
+		
+				$.each($games, function(index, game) {
+					$(game).parent().append(game);
+				});
+			}
+		});
+		
+	</script>
+
+</body>
+
+</html>

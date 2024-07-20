@@ -1,0 +1,23 @@
+package com.adminportal.sevices.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.adminportal.Repository.UserServiceRepository;
+import com.adminportal.domain.UserShipping;
+import com.adminportal.sevices.UserShippingService;
+
+
+@Service
+public class UserShippingServiceImpl implements UserShippingService{
+	
+	@Autowired
+	private UserServiceRepository userServiceRepository;
+	
+	
+	public List<UserShipping> findAll(){
+		return (List<UserShipping>) userServiceRepository.findAll();
+	}
+}

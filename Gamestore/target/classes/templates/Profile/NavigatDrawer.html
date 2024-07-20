@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{header::common-header}">
+</head>
+
+<body class="account-body">
+
+	<header th:insert="~{header::header}"></header>
+
+	<section class="Navigation-section" th:fragment="Navigation-section">
+
+		<button id="menu-toggle" class="p-4 focus:outline-none fixed top-4 left-4 z-50 dtb">
+			<svg class="w-10 h-10 menu-open-button" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+				xmlns="http://www.w3.org/2000/svg">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+				</path>
+			</svg>
+		</button>
+
+		<div id="drawer"
+			class="fixed inset-y-0 left-0 transform -translate-x-full transition-transform duration-300 ease-in-out bg-white shadow-lg w-64 z-40">
+			<div class="flex items-center p-4 menu-headline">
+				<div class="flex items-center space-x-2">
+					<i class="menu-sidebar-icons">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+							color="#ffffff" fill="none">
+							<path
+								d="M2 18C2 16.4596 2 15.6893 2.34673 15.1235C2.54074 14.8069 2.80693 14.5407 3.12353 14.3467C3.68934 14 4.45956 14 6 14C7.54044 14 8.31066 14 8.87647 14.3467C9.19307 14.5407 9.45926 14.8069 9.65327 15.1235C10 15.6893 10 16.4596 10 18C10 19.5404 10 20.3107 9.65327 20.8765C9.45926 21.1931 9.19307 21.4593 8.87647 21.6533C8.31066 22 7.54044 22 6 22C4.45956 22 3.68934 22 3.12353 21.6533C2.80693 21.4593 2.54074 21.1931 2.34673 20.8765C2 20.3107 2 19.5404 2 18Z"
+								stroke="currentColor" stroke-width="1.5" />
+							<path
+								d="M14 18C14 16.4596 14 15.6893 14.3467 15.1235C14.5407 14.8069 14.8069 14.5407 15.1235 14.3467C15.6893 14 16.4596 14 18 14C19.5404 14 20.3107 14 20.8765 14.3467C21.1931 14.5407 21.4593 14.8069 21.6533 15.1235C22 15.6893 22 16.4596 22 18C22 19.5404 22 20.3107 21.6533 20.8765C21.4593 21.1931 21.1931 21.4593 20.8765 21.6533C20.3107 22 19.5404 22 18 22C16.4596 22 15.6893 22 15.1235 21.6533C14.8069 21.4593 14.5407 21.1931 14.3467 20.8765C14 20.3107 14 19.5404 14 18Z"
+								stroke="currentColor" stroke-width="1.5" />
+							<path
+								d="M2 6C2 4.45956 2 3.68934 2.34673 3.12353C2.54074 2.80693 2.80693 2.54074 3.12353 2.34673C3.68934 2 4.45956 2 6 2C7.54044 2 8.31066 2 8.87647 2.34673C9.19307 2.54074 9.45926 2.80693 9.65327 3.12353C10 3.68934 10 4.45956 10 6C10 7.54044 10 8.31066 9.65327 8.87647C9.45926 9.19307 9.19307 9.45926 8.87647 9.65327C8.31066 10 7.54044 10 6 10C4.45956 10 3.68934 10 3.12353 9.65327C2.80693 9.45926 2.54074 9.19307 2.34673 8.87647C2 8.31066 2 7.54044 2 6Z"
+								stroke="currentColor" stroke-width="1.5" />
+							<path
+								d="M14 6C14 4.45956 14 3.68934 14.3467 3.12353C14.5407 2.80693 14.8069 2.54074 15.1235 2.34673C15.6893 2 16.4596 2 18 2C19.5404 2 20.3107 2 20.8765 2.34673C21.1931 2.54074 21.4593 2.80693 21.6533 3.12353C22 3.68934 22 4.45956 22 6C22 7.54044 22 8.31066 21.6533 8.87647C21.4593 9.19307 21.1931 9.45926 20.8765 9.65327C20.3107 10 19.5404 10 18 10C16.4596 10 15.6893 10 15.1235 9.65327C14.8069 9.45926 14.5407 9.19307 14.3467 8.87647C14 8.31066 14 7.54044 14 6Z"
+								stroke="currentColor" stroke-width="1.5" />
+						</svg>
+					</i>
+					<h2 class="text-lg font-semibold">Menu</h2>
+				</div>
+				<button id="menu-close" class="ml-auto focus:outline-none menu-close-button">
+					<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+						xmlns="http://www.w3.org/2000/svg">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+						</path>
+					</svg>
+				</button>
+			</div>
+			<nav class="navigation-nav mt-4">
+				<a  th:href="@{/MyProfile}" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-200">
+					<i class="sidebar-icons">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+							color="#000000" fill="none">
+							<path
+								d="M21.544 11.045C21.848 11.4713 22 11.6845 22 12C22 12.3155 21.848 12.5287 21.544 12.955C20.1779 14.8706 16.6892 19 12 19C7.31078 19 3.8221 14.8706 2.45604 12.955C2.15201 12.5287 2 12.3155 2 12C2 11.6845 2.15201 11.4713 2.45604 11.045C3.8221 9.12944 7.31078 5 12 5C16.6892 5 20.1779 9.12944 21.544 11.045Z"
+								stroke="currentColor" stroke-width="1.5" />
+							<path
+								d="M15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15C13.6569 15 15 13.6569 15 12Z"
+								stroke="currentColor" stroke-width="1.5" />
+						</svg>
+					</i>
+					<span>View</span>
+				</a>
+				<a th:href="@{/EditProfile}" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-200">
+					<i class="sidebar-icons"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+							height="24" color="#000000" fill="none">
+							<path d="M11.0215 6.78662V19.7866" stroke="currentColor" stroke-width="1.5"
+								stroke-linecap="round" />
+							<path
+								d="M11 19.5C10.7777 19.5 10.3235 19.2579 9.41526 18.7738C8.4921 18.2818 7.2167 17.7922 5.5825 17.4849C3.74929 17.1401 2.83268 16.9678 2.41634 16.4588C2 15.9499 2 15.1347 2 13.5044V7.09655C2 5.31353 2 4.42202 2.6487 3.87302C3.29741 3.32401 4.05911 3.46725 5.5825 3.75372C8.58958 4.3192 10.3818 5.50205 11 6.18114C11.6182 5.50205 13.4104 4.3192 16.4175 3.75372C17.9409 3.46725 18.7026 3.32401 19.3513 3.87302C20 4.42202 20 5.31353 20 7.09655V10"
+								stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+								stroke-linejoin="round" />
+							<path
+								d="M20.8638 12.9393L21.5589 13.6317C22.147 14.2174 22.147 15.1672 21.5589 15.7529L17.9171 19.4485C17.6306 19.7338 17.2642 19.9262 16.8659 20.0003L14.6088 20.4883C14.2524 20.5653 13.9351 20.2502 14.0114 19.895L14.4919 17.6598C14.5663 17.2631 14.7594 16.8981 15.0459 16.6128L18.734 12.9393C19.3222 12.3536 20.2757 12.3536 20.8638 12.9393Z"
+								stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+								stroke-linejoin="round" />
+						</svg></i>
+					<span>Edit</span>
+				</a>
+				<a th:href="@{/Order}" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-200">
+					<i class="sidebar-icons">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+							color="#000000" fill="none">
+							<circle cx="17" cy="19" r="2" stroke="currentColor" stroke-width="1.5" />
+							<circle cx="7" cy="19" r="2" stroke="currentColor" stroke-width="1.5" />
+							<path
+								d="M2 9V13.947C2 16.329 2 17.52 2.73223 18.26C3.2191 18.752 3.90328 18.9169 5 18.9722M12.4271 5C13.3404 5.2999 14.0564 6.02354 14.3532 6.94653C14.5 7.40322 14.5 7.96752 14.5 9.09613C14.5 9.84853 14.5 10.2247 14.5979 10.5292C14.7957 11.1445 15.2731 11.6269 15.882 11.8269C16.1832 11.9258 16.5555 11.9258 17.3 11.9258H22V13.947C22 16.329 22 17.52 21.2678 18.26C20.7809 18.752 20.0967 18.9169 19 18.9722M9 19H15"
+								stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+								stroke-linejoin="round" />
+							<path
+								d="M14.5 7H16.3212C17.7766 7 18.5042 7 19.0964 7.35371C19.6886 7.70742 20.0336 8.34811 20.7236 9.6295L22 12"
+								stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+								stroke-linejoin="round" />
+							<path
+								d="M7.32653 8L8.81309 6.82582C9.60436 6.20083 10 5.88833 10 5.5M7.32653 3L8.81309 4.17417C9.60436 4.79917 10 5.11168 10 5.5M10 5.5L2 5.5"
+								stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+								stroke-linejoin="round" />
+						</svg>
+					</i>
+					<span>Order</span>
+				</a>
+				<a th:href="@{/Billing}" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-200">
+					<i class="sidebar-icons">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+							color="#000000" fill="none">
+							<path
+								d="M20.016 2C18.9026 2 18 4.68629 18 8H20.016C20.9876 8 21.4734 8 21.7741 7.66455C22.0749 7.32909 22.0225 6.88733 21.9178 6.00381C21.6414 3.67143 20.8943 2 20.016 2Z"
+								stroke="currentColor" stroke-width="1.5" />
+							<path
+								d="M18 8.05426V18.6458C18 20.1575 18 20.9133 17.538 21.2108C16.7831 21.6971 15.6161 20.6774 15.0291 20.3073C14.5441 20.0014 14.3017 19.8485 14.0325 19.8397C13.7417 19.8301 13.4949 19.9768 12.9709 20.3073L11.06 21.5124C10.5445 21.8374 10.2868 22 10 22C9.71321 22 9.45546 21.8374 8.94 21.5124L7.02913 20.3073C6.54415 20.0014 6.30166 19.8485 6.03253 19.8397C5.74172 19.8301 5.49493 19.9768 4.97087 20.3073C4.38395 20.6774 3.21687 21.6971 2.46195 21.2108C2 20.9133 2 20.1575 2 18.6458V8.05426C2 5.20025 2 3.77325 2.87868 2.88663C3.75736 2 5.17157 2 8 2H20"
+								stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+								stroke-linejoin="round" />
+							<path d="M6 6H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+								stroke-linejoin="round" />
+							<path d="M8 10H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+								stroke-linejoin="round" />
+							<path
+								d="M12.5 10.875C11.6716 10.875 11 11.4626 11 12.1875C11 12.9124 11.6716 13.5 12.5 13.5C13.3284 13.5 14 14.0876 14 14.8125C14 15.5374 13.3284 16.125 12.5 16.125M12.5 10.875C13.1531 10.875 13.7087 11.2402 13.9146 11.75M12.5 10.875V10M12.5 16.125C11.8469 16.125 11.2913 15.7598 11.0854 15.25M12.5 16.125V17"
+								stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+						</svg>
+					</i>
+					<span>Billing</span>
+				</a>
+				<a th:href="@{/Shipping}" class="flex items-center py-2.5 px-4 rounded transition duration-200 hover:bg-gray-200">
+					<i class="sidebar-icons">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+							color="#000000" fill="none">
+							<circle cx="17" cy="18" r="2" stroke="currentColor" stroke-width="1.5" />
+							<circle cx="7" cy="18" r="2" stroke="currentColor" stroke-width="1.5" />
+							<path
+								d="M5 17.9724C3.90328 17.9178 3.2191 17.7546 2.73223 17.2678C2.24536 16.7809 2.08222 16.0967 2.02755 15M9 18H15M19 17.9724C20.0967 17.9178 20.7809 17.7546 21.2678 17.2678C22 16.5355 22 15.357 22 13V11H17.3C16.5555 11 16.1832 11 15.882 10.9021C15.2731 10.7043 14.7957 10.2269 14.5979 9.61803C14.5 9.31677 14.5 8.94451 14.5 8.2C14.5 7.08323 14.5 6.52485 14.3532 6.07295C14.0564 5.15964 13.3404 4.44358 12.4271 4.14683C11.9752 4 11.4168 4 10.3 4H2"
+								stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+								stroke-linejoin="round" />
+							<path d="M2 8H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+								stroke-linejoin="round" />
+							<path d="M2 11H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+								stroke-linejoin="round" />
+							<path
+								d="M14.5 6H16.3212C17.7766 6 18.5042 6 19.0964 6.35371C19.6886 6.70742 20.0336 7.34811 20.7236 8.6295L22 11"
+								stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+								stroke-linejoin="round" />
+						</svg>
+					</i>
+					<span>Shipping</span>
+				</a>
+			</nav>
+		</div>
+
+
+		<script>
+			document.getElementById('menu-toggle').addEventListener('click', function () {
+				document.getElementById('drawer').classList.toggle('-translate-x-full');
+				document.getElementById('menu-toggle').classList.toggle('hidden');
+				document.body.classList.toggle('drawer-open');
+			});
+
+			document.getElementById('menu-close').addEventListener('click', function () {
+				document.getElementById('drawer').classList.add('-translate-x-full');
+				document.getElementById('menu-toggle').classList.remove('hidden');
+				document.body.classList.remove('drawer-open');
+			});
+			 isDragging = false;
+			let startX;
+
+			document.addEventListener('mousedown', function (event) {
+				if (event.button === 0) { // Left mouse button
+					isDragging = true;
+					startX = event.clientX;
+				}
+			});
+
+			document.addEventListener('mousemove', function (event) {
+				if (isDragging) {
+					let distanceDragged = event.clientX - startX;
+					if (distanceDragged > 50) { // Adjust this value as needed for sensitivity
+						document.getElementById('drawer').classList.remove('-translate-x-full');
+						document.getElementById('menu-toggle').classList.add('hidden');
+						document.body.classList.add('drawer-open');
+					}
+				}
+			});
+
+			document.addEventListener('mouseup', function () {
+				isDragging = false;
+			});
+
+			document.addEventListener('mouseleave', function () {
+				isDragging = false;
+			});
+
+
+		</script>
+	</section>
+
+
+	<div th:replace="~{header::scripts}"></div>
+	
+</body>
+
+</html>

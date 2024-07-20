@@ -1,0 +1,83 @@
+package com.gamestore.utility;
+
+import java.util.Locale;
+
+import org.apache.logging.log4j.message.SimpleMessage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Component;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+
+import com.gamestore.domain.CartItems;
+import com.gamestore.domain.Order;
+import com.gamestore.domain.User;
+
+import jakarta.mail.internet.MimeMessage;
+
+@Component
+public class MailConstructor {
+
+	@Autowired
+	private TemplateEngine templateEngine;
+
+	@Autowired
+	private JavaMailSender javaMailSender;
+	
+
+	public SimpleMailMessage contactMailSend(String name, String email , String msg) {
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo("bachhavroshan600@gmail.com");
+		mail.setSubject("User Message");
+		mail.setText(msg);
+		mail.setFrom(user.getEmail());
+	}
+
+
+	public SimpleMailMessage constructResetTokenEmail(String contextPath, Locale locale, String token, User user,
+			String password , String usernameSentToEmail) {
+
+		String url = contextPath + "/verify?token=" + token;
+		String message = "\nPlease click on this link to verify your email and edit your personal information."
+				+ " Your Username { "
+				+ usernameSentToEmail + " } & "
+				+ " Your password { "
+				+ password + " } Please this is credintial dont forward anyone...";
+		SimpleMailMessage email = new SimpleMailMessage();
+		email.setTo(user.getEmail());
+		email.setSubject("Hey Welcome to RV GameStore website. ");
+		email.setText(url + message);
+		email.setFrom("bachhavroshan600@gmail.com");
+		return email;
+	}
+
+	public void sendOrderConfirmationEmail(User user, Order order, Locale locale) {
+		Context context = new Context(locale);
+		context.setVariable("user", user);
+		context.setVariable("order", order);
+		context.setVariable("cartItemList", order.getCartItems());
+
+		String emailContent = templateEngine.process("OrderSummerySendGmail", context);
+
+		sendHtmlEmail(user.getEmail(), "Hey " + user.getUsername() + ", your Order is Confirmed", emailContent);
+	}
+
+	private void sendHtmlEmail(String to, String subject, String htmlContent) {
+		try {
+			MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+			helper.setTo(to);
+			helper.setFrom("bachhavroshan600@gmail.com");
+			helper.setSubject(subject);
+			helper.setText(htmlContent, true);
+			javaMailSender.send(mimeMessage);
+			
+		} catch (Exception e) {
+			System.out.println(e);
+			e.printStackTrace();
+		}
+	}
+	
+}

@@ -1,0 +1,13 @@
+package com.adminportal.sevices;
+
+import java.util.List;
+
+import com.adminportal.domain.Order;
+
+public interface OrderService {
+	
+	List<Order> findAll();
+	
+	void deleteOrderById(Long id);
+
+}

@@ -1,0 +1,6 @@
+package com.gamestore.services;
+
+
+public interface ContactService {
+	
+}

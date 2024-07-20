@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--<head th:insert="~{common/header::common-header}">-->
+
+<head>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.css" />
+	<link href="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.css" rel="stylesheet" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;6000&display=swap" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+	<link href="/css/AddProduct.css" rel="stylesheet" />
+	<link rel="website icon" type="png" href="/images/game-store-logo.png" />
+	<link href="/css/global.css" rel="stylesheet" />
+</head>
+
+<body>
+	<header th:insert="~{common/header :: header}"></header>
+
+  
+	<div class="container">
+		<form th:action="@{/admin/game/addProducts}" method="post" enctype="multipart/form-data">
+			<div class="row rounded">
+				<div class="col-lg-8 main-div">
+					<div class="card mb-3 mb-lg-5">
+						<div class="card-header">
+							<h5>Product Details</h5>
+						</div>
+						<div class="card-body">
+							<label for="title" class="game-labels">Game Name :</label>
+							<input type="text" class="form-control" name="title" id="title" th:value="${game.title}" />
+
+							<label for="message"
+								class="block mb-2 mt-3 text-sm text-gray-900 dark:text-white">Description</label>
+							<textarea id="message" name="description" rows="4"
+								class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+								placeholder="Add desciption of game..." th:value="${game.description}"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 main-div">
+          <div class="card mb-3 mb-lg-5">
+						<div class="card-header">
+							<h5>Game Pricing</h5>
+						</div>
+						<div class="card-body">
+							<label for="off" class="game-labels mt-1">Offer :</label>
+							<input type="text" class="form-control" name="off" id="title" th:value="${game.off}" />
+
+							<label for="list-Price" class="game-labels mt-2">List Price :</label>
+							<input type="text" class="form-control" name="listPrice" id="title"
+								th:value="${game.listPrice}" />
+
+							<label for="our-Price" class="game-labels mt-2">Our Price :</label>
+							<input type="text" class="form-control mb-1" name="ourPrice" id="title"
+								th:value="${game.ourPrice}" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row rounded">
+				<div class="col-lg-8 main-div-2">
+					<div class="card mb-3 mb-lg-5">
+						<div class="card-header">
+							<h5>Game Image</h5>
+						</div>
+						<div class="card-body">
+							<div class="flex items-center justify-center w-full">
+								<label for="dropzone-file"
+									class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+									<div class="flex flex-col items-center justify-center pt-5 pb-6">
+										<svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+											xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+											<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+												stroke-width="2"
+												d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+										</svg>
+										<p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+											<span class="font-semibold">Click to upload</span> or
+											drag and drop
+										</p>
+										<p class="text-xs text-gray-500 dark:text-gray-400">
+											JPG , PNG
+										</p>
+									</div>
+									<input class="hidden" type="file" name="image" id="dropzone-file"
+										th:value="${game.image}" required />
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 main-div-2">
+					<div class="card mb-3 mb-lg-5">
+						<div class="card-header">
+							<h5>Image Preview</h5>
+						</div>
+						<div class="card-body">
+							<div id="imagePreview" class="image-preview">
+								<img id="previewImg" src="#" alt="Image Preview"
+									style="display: none; max-width: 100%; height: 100%" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row rounded">
+				<div class="col-md-6">
+					<div class="card mb-3 mb-lg-5">
+						<div class="card-header">
+              <h5>Categories &amp; Others</h5>
+            </div>
+						<div class="card-body">
+              <label for="star-rating">Select Category</label>
+							<select class="mt-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="category" th:value="${game.category}" id="category">
+								<option value="" disabled selected>Select one</option>
+								<option value="Console" th:selected="(${game.category} == 'Console')">
+									Console
+								</option>
+								<option value="gamingAccessories"
+									th:selected="(${game.category} == 'gamingAccessories')">
+									Gaming Accessories
+								</option>
+								<option value="PCGames" th:selected="(${game.category} == 'PCGames')">
+									Pc games
+								</option>
+								<option value="PS5" th:selected="(${game.category} == 'PS5')">
+									PS5 Games
+								</option>
+								<option value="toys" th:selected="(${game.category} == 'toys')">
+									Toys
+								</option>
+							</select>
+              <hr>
+              <label for="Official-Links" class="game-labels">Official Link :</label>
+							<input type="text" class="form-control" name="linkOfCompany" id="title"
+								th:value="${game.linkOfCompany}" />  
+                <hr>
+              <label for="Official-Links" class="game-labels mb-3">Status :</label>
+              <div class="flex items-center">
+                <div class="mb-4 me-4 flex items-center">
+                    <input checked id="default-radio-1" type="radio" value="true" name="active" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Active</label>
+                </div>
+                <div class="mb-4 me-4 flex items-center">
+                    <input id="default-radio-2" type="radio" value="false" name="active" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600">
+                    <label for="default-radio-2" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Inactice</label>
+                </div>
+              </div> 
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+          <div class="card mb-3 mb-lg-5">
+						<div class="card-header">
+              <h5>Rating</h5>
+            </div>
+            <div class="card-body">
+              <label for="star-rating" class="mb-1">Star Rating</label>
+              <select class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 " name="starRating" th:value="${game.starRating}" id="starRating">
+                <option value="" disabled selected>Select one</option>
+                <option class="stars" value="1" th:selected="(${game.starRating} == 1)">★</option>
+                <option class="stars" value="2" th:selected="(${game.starRating} == 2)">★★</option>
+                <option class="stars" value="3" th:selected="(${game.starRating} == 3)">★★★</option>
+                <option class="stars" value="4" th:selected="(${game.starRating} == 4)">★★★★</option>
+                <option class="stars" value="5" th:selected="(${game.starRating} == 5)">★★★★★</option>
+              </select>     
+              
+              <label for="ageRating" class="game-labels mt-2">Age Rating :</label>
+							<input type="text" class="form-control" name="ageRating" id="title"
+								th:value="${game.ageRating}" />
+              
+              <label for="stock" class="game-labels mt-2">Stock Add :</label>
+							<input type="text" class="form-control mb-3" name="stockAvailable" id="title"
+								th:value="${game.stockAvailable}" />
+            </div>
+          </div>
+        </div>
+			</div>
+      <button type="submit" class="submit-btn">
+        Save This Product
+      </button>
+		</form>
+	</div>
+
+	<script>
+		document.getElementById('dropzone-file').addEventListener('change', function() {
+      var file = this.files[0];
+      var reader = new FileReader();
+      
+      reader.onload = function(e) {
+          document.getElementById('previewImg').setAttribute('src', e.target.result);
+          document.getElementById('previewImg').style.display = 'block';
+      };
+      
+      reader.readAsDataURL(file);
+  });
+  
+	</script>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.datatables.net/v/dt/dt-2.0.8/datatables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="sweetalert2.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
+</body>
+
+</html>

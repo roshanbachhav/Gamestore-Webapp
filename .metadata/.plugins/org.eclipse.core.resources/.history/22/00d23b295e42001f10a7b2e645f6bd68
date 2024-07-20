@@ -1,0 +1,5 @@
+package com.adminportal.sevices.impl;
+
+public class UserBillingServiceImpl {
+
+}

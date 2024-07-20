@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ 
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+
+        body {
+            font-family: "Rubik", sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -15px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .col-md-6 {
+            flex: 0 0 50%;
+            max-width: 50%;
+            padding: 0 15px;
+            box-sizing: border-box;
+        }
+        h1, h2 {
+            color: #333333;
+        }
+        p {
+            color: #666666;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table th, table td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f4f4f9;
+            color: #333333;
+        }
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        img {
+            max-width: 100px;
+            height: auto;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1>Hey, <span th:text="${user.username}">User</span></h1>
+                <p>Thank you for your purchase! Below are the details of your order.</p>
+            </div>
+            <div class="col-md-6">
+                <p>Order ID: <span th:text="'#' + ${order.id}"></span>156105</p>
+                <hr>
+                <p>Order Date: <span th:text="${#dates.format(order.orderDate, 'dd MMMM yyyy')}"></span></p>
+                <p>Delivery Date: <span th:text="${#dates.format(order.shippingDate, 'dd MMMM yyyy')}"></span></p>
+
+            </div>
+        </div>
+        <hr>
+    </div>
+
+    <div class="container">
+        <h2>Shipping Details</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Shipping Address</th>
+                    <th>Billing Details</th>
+                    <th>Payment Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span th:text="${order.shippingAddress.shippingAddressName}">Nashik India</span><br />
+                        <span th:text="${order.shippingAddress.shippingAddressStreet}">Nashik India</span><br />
+                        <span th:text="${order.shippingAddress.shippingAddressZipcode}">Nashik India</span><br />
+                        <span th:text="${order.shippingAddress.shippingAddressCity}">Nashik India</span>
+                    </td>
+                    <td>
+                        <span th:text="${order.billingAddress.userBillName}">Lorem, ipsum dolor.</span><br />
+                        <span th:text="${order.billingAddress.street}">Lorem, ipsum dolor.</span><br />
+                        <span th:text="${order.billingAddress.zipcode}">Lorem, ipsum dolor.</span><br />
+                        <span th:text="${order.billingAddress.city}">Lorem, ipsum dolor.</span>
+                    </td>
+                    <td>
+                        <span th:text="${order.payment.cardName}">Lorem, ipsum dolor.</span><br />
+                        <span th:text="${order.payment.cardNumber}">Lorem, ipsum dolor.</span><br />
+                        <span th:text="${order.payment.holderName}">Lorem, ipsum dolor.</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container">
+        <h2>Order Details</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody th:each="item : ${cartItemList}">
+                <tr>
+                    <td th:text="${item.game.title}">Spiderman 2</td>
+                    <td th:text="${item.game.ourPrice}">1500</td>
+                    <td th:text="${item.quantity}">6</td>
+                    <td th:text="${item.subTotal}">2000</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="text-align: left; margin: 3rem 0px;">
+            <h3>Order Total: <span th:text="${order.totalAmount}">3500</span></h3>
+        </div>
+        <hr>
+        <div class="container">
+            Thank You,<br>
+            We appreciate your business and look forward to serving you again!<br>
+            <br>
+            Sincerely,<br>
+            <strong>RV GameStore</strong><br>
+            <strong>&copy; 2024 Copyright : RVGameStore.com</strong>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlms:th="http://www.thymeleaf.org">
+
+<head th:insert="~{header::common-header}">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="sweetalert2.min.css" />
+</head>
+
+<!-- MessageSend -->
+
+<body>
+	<header th:insert="~{header::header}"></header>
+
+	<div id="alert-1" class="flex items-center p-4 mb-4 text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert" th:if="${messageSend}" style="height: 8rem;">
+		<svg class="flex-shrink-0 w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+		  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+		</svg>
+		<span class="sr-only">Info</span>
+		<div class="ms-3 text-3xl font-medium">
+			<span class="font-medium">Your query has been sent !</span> Thank you for your support.
+		</div>
+		  <button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-blue-50 text-blue-500 rounded-lg focus:ring-2 focus:ring-blue-400 p-1.5 hover:bg-blue-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-blue-400 dark:hover:bg-gray-700" data-dismiss-target="#alert-1" aria-label="Close">
+			<span class="sr-only">Close</span>
+			<svg class="w-8 h-8" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+			  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+			</svg>
+		</button>
+	  </div>
+
+	<section class="contact-section">
+		<h2 class="CH">Contact page</h2>
+		<div class="container">
+			<div class="contact-form">
+				<form th:action="@{/contactFormSubmit}" method="POST" class="contact-inputs">
+					<input type="hidden" name="userId" th:value="${user.id}">
+					<input type="text" placeholder="Enter Full Name" name="fullName" required autocomplete="off" />
+					<input type="email" name="email" placeholder="email" autocomplete="off" required />
+					<textarea name="msg" cols="30" rows="10" required autocomplete="off" placeholder="Enter your message"></textarea>
+					<input class="contact-btn" type="submit" value="Submit" />
+				</form>
+			</div>
+		</div>
+		<div class="map-container">
+			<iframe class="map"
+				src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2651.480513172784!2d73.74487290019529!3d19.976605491636594!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bddec9fae060a65%3A0x8d2ee031ff0b8a3a!2zMTnCsDU4JzM1LjMiTiA3M8KwNDQnNDMuOSJF!5e0!3m2!1sen!2sin!4v1664703818959!5m2!1sen!2sin"
+				width="100%" height="350" style="border: 0" allowfullscreen="" loading="lazy"
+				referrerpolicy="no-referrer-when-downgrade"></iframe>
+		</div>
+	</section>
+
+	<!-- Footer Section -->
+	<footer th:replace="~{index::footer}"></footer>
+	<div th:replace="~{header::scripts}"></div>
+</body>
+
+</html>

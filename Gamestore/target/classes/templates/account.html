@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<!-- <head th:insert="~{header::common-header}"> -->
+		<head>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">	
+	</head>
+
+<body>
+	<!-- <header th:insert="~{header::header}"></header> -->
+
+	<div id="accounts" class="container">
+		<div class="row" style="margin-bottom: -100px;">
+			<div class="col-xs-8">
+				<h2 class="section-headline">
+					<span>User Account</span>
+				</h2>
+			</div>
+		</div>
+		<div class="row" style="margin-top: 60px;">
+			<div class="col-xs-9 col-xs-offset-2">
+
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs">
+					<li th:classappend="${classActiveNewAccount}? 'active'"><a href="#tab-1" data-toggle="tab"><span
+							style="color: red;">Create new account</span></a></li>
+					<li th:classappend="${classActiveLogin}? 'active'"><a href="#tab-2" data-toggle="tab"><span
+							style="color: red;">Log in</span></a></li>
+					<li th:classappend="${classActiveForgetPassword}? 'active'"><a href="#tab-3" data-toggle="tab"><span
+							style="color: red;">Forget Password</span></a></li>
+				</ul>
+
+				<!-- Tab panels -->
+				<div class="tab-content">
+
+					<!-- create new user pane -->
+					<div class="tab-pane fade" id="tab-1" th:classappend="${classActiveNewAccount}? 'in active'">
+						<div class="panel-group">
+							<div class="panel panel-default" style="border: none;">
+								<div class="panel-body"
+									style="margin-top: 20px;">
+									<form th:action="@{/newUser}" method="post">
+										<div class="form-group">
+											<label for="newUsername">Username </label> &nbsp;
+											<span th:if="${usernameExists}" style="color: red; font-weight:500;">Opps! Username Already exists, try to diffrent Usernames.</span>
+											 <input
+												required type="text" class="form-control"
+												id="newUsername" name="username" />
+											<p style="color: #828282">Enter your username here.</p>
+										</div>
+
+										<div class="form-group">
+											<label for="email">Email Address: </label> &nbsp;
+											<span th:if="${emailExists}" style="color: red; font-weight:500;">Opps! Email address Already exists, try to diffrent emailAddress.</span>
+											<input
+												required type="text" class="form-control"
+												id="email" name="email" />
+											<p style="color: #828282">Enter valid Email address for the password will send your gmail.</p>
+										</div>
+										
+										<div class="form-group">
+											<label for="address">Address Here: </label> &nbsp;
+											<input
+												required type="text" class="form-control"
+												id="address" name="address" />
+												<p style="color: #828282">Enter your address here.</p>
+										</div>
+
+										<button type="submit" class="update-btn" style="margin-top: 25px; position:relative; float: left;">Create</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- log in -->
+					<div class="tab-pane fade" id="tab-2" th:classappend="${classActiveLogin}? 'in active'">
+						<div class="panel-group">
+							<div class="panel panel-default" style="border: none;">
+								<div class="panel-body"
+									style="background-color: #ededed; margin-top: 20px;"> 
+									<div th:if="${param.error != null}" style="font-weight: 500; color:rgb(255, 0, 0);">Opps! Incorrect username and password please check correctly. </div>
+									<form th:action="@{/login}" method="post">
+										&nbsp;
+										<div class="form-group">											
+											<label for="username">* Username: </label>
+											 <input
+												required="required" type="text" class="form-control"
+												id="username" name="username" />
+											<p style="color: #828282">Enter your username here.</p>
+										</div>
+
+										<div class="form-group">
+											<label for="password">* Password: </label> &nbsp;
+											<span th:if="${usernameExists}">Opps! Username Already exists, try to diffrent Usernames.</span>
+											<input
+												required="required" type="password" class="form-control"
+												id="password" name="password" />
+											<p style="color: #828282">Enter the password that accompanies your username</p>
+										</div>
+
+										<button type="submit" class="update-btn" style="margin-top: 25px; ">Log in</button>
+									</form>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					<!-- forget password -->
+					<div class="tab-pane fade" id="tab-3" th:classappend="${classActiveForgetPassword}? 'in active'">
+						<div class="panel-group">
+							<div class="panel panel-default" style="border: none;">
+								<div class="panel-body"
+									style="background-color: #ededed; margin-top: 20px;">
+									<div th:if="${incorrectEmail}">Incorrect Email address. Email Dosent exsit</div>
+									<div th:if="${forgetEmailPasswordSend}">Password will send your gmail address</div>
+									<form th:action="@{/forgetPassword}" method="post">
+										<div class="form-group">
+											<label for="recoverEmail">* Your Email: </label> <input
+												required="required" type="text" class="form-control"
+												id="recoverEmail" name="email" />
+											<p style="color: #828282">Enter your registered email address here.</p>
+										</div>
+
+										<button type="submit" class="update-btn" style="margin-top: 25px;">Submit</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end of container -->
+
+	<div th:replace="~{header::scripts}"></div>
+	   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

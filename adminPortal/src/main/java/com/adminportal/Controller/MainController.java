@@ -1,0 +1,92 @@
+package com.adminportal.Controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.adminportal.Repository.UserBillingRepository;
+import com.adminportal.Repository.UserPaymentRepository;
+import com.adminportal.domain.Order;
+import com.adminportal.domain.User;
+import com.adminportal.domain.UserBilling;
+import com.adminportal.domain.UserPayment;
+import com.adminportal.domain.UserShipping;
+import com.adminportal.sevices.OrderService;
+import com.adminportal.sevices.UserBillingService;
+import com.adminportal.sevices.UserPaymentService;
+import com.adminportal.sevices.UserServices;
+import com.adminportal.sevices.UserShippingService;
+
+@Controller
+public class MainController {
+
+	@Autowired
+	private UserServices userService;
+	@Autowired 
+	private OrderService orderService;
+	@Autowired
+	private UserShippingService userShippingService;
+	@Autowired
+	private UserPaymentService userPaymentService;
+	@Autowired
+	private UserPaymentRepository userPaymentRepository;
+	@Autowired
+	private UserBillingService userBillingService;
+	@Autowired
+	private UserBillingRepository userBillingRepository;
+	@RequestMapping("/admin/")
+	public String index(Model m) {
+		return "redirect:/main";
+	}
+
+	@RequestMapping("/admin/main")
+	public String main(Model m) {
+		// User
+		List<User> userList = userService.findAll();
+		System.out.println("This is Users" + userList);
+		m.addAttribute("userList", userList);
+		
+		// Order		
+		List<Order> orderData = orderService.findAll();
+		System.out.println("orderLists -> " + orderData);
+		m.addAttribute("orderData" , orderData);
+
+		//Shipping
+		List<UserShipping> userShippingData = userShippingService.findAll();
+		m.addAttribute("userShippingData",userShippingData);
+		
+		//payment
+		List<UserPayment> userPaymentData = new ArrayList<>();
+        userPaymentRepository.findAll().forEach(userPaymentData::add);
+        m.addAttribute("userPaymentData", userPaymentData);
+		
+        //Billing        
+        List<UserBilling> userBillingData = userBillingService.findAll();
+        m.addAttribute("userBillingData", userBillingData);
+
+		return "main";
+	}
+	
+	@RequestMapping("/user/deleteUserById")
+	public String deleteUserById(@RequestParam("id") Long id , Model m) {
+		userService.deleteById(id);
+		return "redirect:/main";
+	}
+	
+	@RequestMapping("/user/deleteOrderById")
+	public String deleteOrder(@RequestParam("id") Long id , Model m) {
+		orderService.deleteOrderById(id);
+		return "redirect:/main";
+	}
+
+	@RequestMapping("/admin/login")
+	public String login() {
+		return "login";
+	}
+
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="~{header::common-header}">
+</head>
+
+<body>
+
+    <header th:insert="~{header::header}"></header>
+	<div th:replace="~{header::scripts}"></div>
+    <section th:insert="~{/Profile/NavigatDrawer::Navigation-section}"></section>
+
+    <div class="container mx-auto">
+        <div class="breadcrumb-panel">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item mt-1"><a href="/Billing"  th:style="${billingFileOpen} ? 'color:#ffe600' ">Home</a></li>
+                    <li class="breadcrumb-item active mt-1" aria-current="page"><a
+                            th:href="@{/addNewCreditCard}">Update/Add Credit Details</a></li>
+                </ol>
+            </nav>
+        </div>
+
+        <form th:action="@{/setDefaultCard}" method="post">
+            <div class="flex justify-center items-center my-5">
+                    <table class="min-w-full bg-white shadow-md rounded">
+                        <thead>
+                            <tr>
+                                <th class="py-3 px-6 bg-gray-200 text-gray-800 text-left text-sm uppercase font-bold">Default</th>
+                                <th class="py-3 px-6 bg-gray-200 text-gray-800 text-left text-sm uppercase font-bold">Credit Card Name</th>
+                                <th class="py-3 px-6 bg-gray-200 text-gray-800 text-left text-sm uppercase font-bold">Credit Card Number</th>
+                                <th class="py-3 px-6 bg-gray-200 text-gray-800 text-left text-sm uppercase font-bold">Operation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b" th:each="userPayment : ${userPaymentList}">
+                                <td class="px-5"><input type="radio" name="defaultUserPaymentId" th:value="${userPayment.id}" th:checked="${userPayment.defaultPayment}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" style="outline: 2px solid rgb(4, 4, 6); border-radius: 50%; cursor: pointer;"></td>
+                                <td class="py-4 px-6 text-gray-700" th:text="${userPayment.cardName}" style="font-size: 15px;"></td>
+                                <td class="py-4 px-6 text-gray-700" th:text="${userPayment.cardNumber}" style="font-size: 15px;"></td>
+                                <td class="py-4 px-6 text-gray-700">
+                                    <div class="billing-operation flex space-x-4">
+                                        <span class="Edit-bill">
+                                            <a th:href="@{/updateCreditCard(id=${userPayment.id})}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#000000" fill="none">
+                                                    <path d="M16.9459 3.17305C17.5332 2.58578 17.8268 2.29215 18.1521 2.15173C18.6208 1.94942 19.1521 1.94942 19.6208 2.15173C19.946 2.29215 20.2397 2.58578 20.8269 3.17305C21.4142 3.76032 21.7079 4.05395 21.8483 4.37925C22.0506 4.8479 22.0506 5.37924 21.8483 5.84789C21.7079 6.17319 21.4142 6.46682 20.8269 7.05409L15.8054 12.0757C14.5682 13.3129 13.9496 13.9315 13.1748 14.298C12.4 14.6645 11.5294 14.7504 9.78823 14.9222L9 15L9.07778 14.2118C9.24958 12.4706 9.33549 11.6 9.70201 10.8252C10.0685 10.0504 10.6871 9.43183 11.9243 8.19464L16.9459 3.17305Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                                                    <path d="M6 15H3.75C2.7835 15 2 15.7835 2 16.75C2 17.7165 2.7835 18.5 3.75 18.5H13.25C14.2165 18.5 15 19.2835 15 20.25C15 21.2165 14.2165 22 13.25 22H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
+                                            </a>
+                                        </span>
+                                        <span class="delete-bill">
+                                            <a th:href="@{/removeCreditCard(id=${userPayment.id})}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#000000" fill="none">
+                                                    <path d="M4.47461 6.10018L5.31543 18.1768C5.40886 19.3365 6.28178 21.5536 8.51889 21.8022C10.756 22.0507 15.2503 21.9951 16.0699 21.9951C16.8895 21.9951 19.0128 21.4136 19.0128 19.0059C19.0128 16.5756 16.9833 15.9419 15.7077 15.9635H12.0554M12.0554 15.9635C12.0607 15.7494 12.1515 15.5372 12.3278 15.3828L14.487 13.4924M12.0554 15.9635C12.0497 16.1919 12.1412 16.4224 12.33 16.5864L14.487 18.4609M19.4701 5.82422L19.0023 13.4792" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path d="M3 5.49561H21M16.0555 5.49561L15.3729 4.08911C14.9194 3.15481 14.6926 2.68766 14.3015 2.39631C14.2148 2.33168 14.1229 2.2742 14.0268 2.22442C13.5937 2 13.0739 2 12.0343 2C10.9686 2 10.4358 2 9.99549 2.23383C9.89791 2.28565 9.80479 2.34547 9.7171 2.41265C9.32145 2.7158 9.10044 3.20004 8.65842 4.16854L8.05273 5.49561" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </td>                                
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button type="submit" class="Billing-save-btn">
+                    <span class="relative px-5 py-2.5 transition-all ease-in duration-75 rounded-md">
+                        Save
+                    </span>
+                </button>
+        </form>
+
+
+        <div th:if="${noMorePaymemtData}" class="container mx-auto mt-5">
+            <div class="bg-red-100 border-l-4 border-yellow-100 text-black-700 p-4" role="alert">
+                <p class="text-2xl mb-2 font-medium">Opps ! <span class="mx-3" th:text="${user.username}"></span></p>
+                <p class="text-xl">
+                    Add your billing details. You can save multiple cards for convenience.
+                </p>
+            </div>
+        </div>
+
+
+    </div>
+    
+
+    <footer th:replace="~{index::footer}"></footer>
+  
+</body>
+
+</html>
