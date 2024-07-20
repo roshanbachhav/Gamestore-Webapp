@@ -26,42 +26,4 @@ public class GamestoreApplication implements CommandLineRunner {
 		SpringApplication.run(GamestoreApplication.class, args);
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
-//		User user1 = new User();
-//		user1.setFirstName("Roshan");
-//		user1.setLastName("Bachhav");
-//		user1.setUsername("roshan123");
-//		user1.setPassword(SecurityUtility.passwordEncoder().encode("p"));
-//		user1.setEmail("bachhavr123@gmail.com");
-//
-//		Role role1 = new Role();
-//		role1.setRoleId(1);
-//		role1.setName("ROLE_USER");
-//
-//		Set<UserRole> userRoles = new HashSet<>();
-//		userRoles.add(new UserRole(user1, role1));
-//
-//		userService.createUser(user1, userRoles);
-		
-		User user1 = new User();
-	    user1.setFirstName("Roshan");
-	    user1.setLastName("Bachhav");
-	    user1.setUsername("roshan123");
-	    user1.setPhone("1234567890");
-	    user1.setPassword(SecurityUtility.passwordEncoder().encode("p"));
-	    user1.setEmail("bachhavr123@gmail.com");
-
-	    Role role1 = new Role();
-	    role1.setRoleId(1);
-	    role1.setName("ROLE_USER");
-
-	    roleRepository.save(role1);
-
-	    Set<UserRole> userRoles = new HashSet<>();
-	    userRoles.add(new UserRole(user1, role1));
-
-	    userService.createUser(user1, userRoles);
-	}
-
 }
