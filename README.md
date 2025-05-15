@@ -22,7 +22,7 @@ Pages
 ![Screenshot 2024-07-20 215634](https://github.com/user-attachments/assets/ba13d9d3-4aef-48cf-9743-785cb3880dba)
 ![Screenshot 2024-07-20 215624](https://github.com/user-attachments/assets/91f97c38-2b1f-4a59-bd0b-72ff5acfeba8)
 ![Screenshot 2024-07-20 215338](https://github.com/user-attachments/assets/ce415c67-f9f2-433c-ae22-43f36dad6da9)
-</details>
+
 
 Admin pages:
 ![Screenshot 2024-07-20 222541](https://github.com/user-attachments/assets/29ac7702-dde2-4a53-958a-34ed0152907a)
@@ -30,3 +30,5 @@ Admin pages:
 ![Screenshot 2024-07-20 222513](https://github.com/user-attachments/assets/86eab57f-b925-4722-a3f6-ff49dcb6949e)
 ![Screenshot 2024-07-20 222503](https://github.com/user-attachments/assets/4f29993f-61e1-4c76-94e7-07e05396a9bc)
 ![Screenshot 2024-07-20 222441](https://github.com/user-attachments/assets/4a1f383c-f24d-4afc-ba69-f1a9e6562e88)
+
+</details>
