@@ -5,7 +5,8 @@ Backend:
   Hibernate, Thymeleaf, Spring Boot, MySQL
 
 The project is organized into two folders: one for users and one for admins, each running on different ports. 
-
+<details>
+<summary>📸 Screenshots</summary>
 Pages
 ![checkout](https://github.com/user-attachments/assets/4eef8c49-2603-42af-a0b1-2f92399eb493)
 ![Screenshot 2024-07-20 222117](https://github.com/user-attachments/assets/383a3987-da28-48ab-bfa0-b1d1e68209db)
@@ -21,6 +22,7 @@ Pages
 ![Screenshot 2024-07-20 215634](https://github.com/user-attachments/assets/ba13d9d3-4aef-48cf-9743-785cb3880dba)
 ![Screenshot 2024-07-20 215624](https://github.com/user-attachments/assets/91f97c38-2b1f-4a59-bd0b-72ff5acfeba8)
 ![Screenshot 2024-07-20 215338](https://github.com/user-attachments/assets/ce415c67-f9f2-433c-ae22-43f36dad6da9)
+</details>
 
 Admin pages:
 ![Screenshot 2024-07-20 222541](https://github.com/user-attachments/assets/29ac7702-dde2-4a53-958a-34ed0152907a)
