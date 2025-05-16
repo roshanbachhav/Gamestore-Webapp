@@ -1,8 +1,382 @@
-RV GameStore is an e-commerce web app for gaming accessories, featuring a responsive frontend built with HTML, CSS, and JavaScript. It integrates MySQL for efficient data management, ensuring a seamless shopping experience. The project is divided into two parts
+**🚀 RV GameStore**
+RV GameStore is a full-stack e-commerce web application built for browsing and managing gaming accessories. This project was developed as a major personal initiative using Java Spring Boot on the backend and a responsive HTML/CSS/JavaScript frontend.
+
+The platform is designed to simulate an online game store experience with key features such as user registration, game catalog browsing, cart management, and admin-level product control.
+-----
+**📌 Key Features**
+🔐 User Authentication – Separate login for Admin and User with session handling
+
+🛍️ User Portal – Browse games, view details, add to cart
+
+🧑‍💼 Admin Dashboard – Manage games, categories, user data, and orders
+
+📩 Email – SMTP Service Provided
+
+🔄 AJAX Integration – Smooth, dynamic updates without page reloads
+
+🔧 MySQL Database – Efficient data management for users, products, and orders
+----
+**🧱 Project Structure**
+The project is divided into two independent modules:
+
+User Module
+Accessible to regular users for browsing, registration, and cart operations
+
+Runs on port 8080
+
+Admin Module
+Accessible only to admins for product and user management
+
+Runs on port 9090
+
+----
+
+**🛠️ Tech Stack**
 Frontend:
-  HTML, CSS, JavaScript, Bootstrap, Tailwind CSS, Ajax, jQuery
+HTML5, CSS3, JavaScript
+Bootstrap, Tailwind CSS
+jQuery, AJAX
+
 Backend:
-  Hibernate, Thymeleaf, Spring Boot, MySQL
+Java (Spring Boot)
+Hibernate (ORM)
+Thymeleaf (Template Engine)
+MySQL (Database)
+
+----
+
+📂 Folder Structure Overview
+
+/RV-gamestore
+├── /user-portal
+├───java
+│   └───com
+│       └───gamestore
+│           │   GamestoreApplication.java
+│           │   
+│           ├───config
+│           │       MailConfig.java
+│           │       SecurityConfig.java
+│           │       
+│           ├───controller
+│           │       CartController.java
+│           │       CheckoutController.java
+│           │       HomeController.java
+│           │
+│           ├───domain
+│           │   │   BillAddress.java
+│           │   │   CartItems.java
+│           │   │   Contact.java
+│           │   │   Game.java
+│           │   │   GameCartItem.java
+│           │   │   Order.java
+│           │   │   Payment.java
+│           │   │   ShippingAddress.java
+│           │   │   ShoppingCart.java
+│           │   │   User.java
+│           │   │   UserBilling.java
+│           │   │   UserPayment.java
+│           │   │   UserShipping.java
+│           │   │
+│           │   └───security
+│           │           Authority.java
+│           │           passwordResetToken.java
+│           │           Role.java
+│           │           UserRole.java
+│           │
+│           ├───repository
+│           │       CartItemRepository.java
+│           │       ContactServiceRepository.java
+│           │       GameCartItemRepository.java
+│           │       GameRepository.java
+│           │       OrderRepository.java
+│           │       PasswordResetTokenRepository.java
+│           │       RoleRepository.java
+│           │       ShoppingCartRepository.java
+│           │       UserPaymentRepository.java
+│           │       UserRepository.java
+│           │       UserRoleRepository.java
+│           │       UserShippingRepository.java
+│           │
+│           ├───services
+│           │   │   BillingAddressService.java
+│           │   │   CartItemService.java
+│           │   │   ContactService.java
+│           │   │   GameService.java
+│           │   │   OrderService.java
+│           │   │   PasswordResetTokenService.java
+│           │   │   PaymentService.java
+│           │   │   ShoppingAddressService.java
+│           │   │   ShoppingCartService.java
+│           │   │   UserPaymentService.java
+│           │   │   UserService.java
+│           │   │   UserShippingService.java
+│           │   │
+│           │   └───impl
+│           │           BillingAddressServiceImpl.java
+│           │           CartItemServiceImpl.java
+│           │           ContactServiceImpl.java
+│           │           GameServiceImpl.java
+│           │           OrderServiceImpl.java
+│           │           PaymentServiceImpl.java
+│           │           ShoppingAddressServiceImpl.java
+│           │           ShoppingCartServiceImpl.java
+│           │           UserPaymentServiceImpl.java
+│           │           UserSecurityService.java
+│           │           UserServiceImpl.java
+│           │           UserShippingServiceImpl.java
+│           │
+│           └───utility
+│                   INDConst.java
+│                   MailConstructor.java
+│                   SecurityUtility.java
+│
+└───resources
+    │   application.properties
+    │   
+    ├───static
+    │   ├───css
+    │   │       bootstrap-theme.css
+    │   │       bootstrap-theme.css.map
+    │   │       bootstrap-theme.min.css
+    │   │       bootstrap-theme.min.css.map
+    │   │       bootstrap.css
+    │   │       bootstrap.css.map
+    │   │       bootstrap.min.css
+    │   │       bootstrap.min.css.map
+    │   │       legal.css
+    │   │       shop.css
+    │   │       style.css
+    │   │
+    │   ├───fonts
+    │   │       glyphicons-halflings-regular.eot
+    │   │       glyphicons-halflings-regular.svg
+    │   │       glyphicons-halflings-regular.ttf
+    │   │       glyphicons-halflings-regular.woff
+    │   │       glyphicons-halflings-regular.woff2
+    │   │
+    │   ├───images
+    │   │   │   Activision-logo.png
+    │   │   │   bag-1.png
+    │   │   │   bag.png
+    │   │   │   banner.png
+    │   │   │   bg1.jpg
+    │   │   │   bg2.jpg
+    │   │   │   EA-logo.png
+    │   │   │   epic-games.png
+    │   │   │   faqbg.jpg
+    │   │   │   g1.jpg
+    │   │   │   game-store-logo.png
+    │   │   │   gaming-purpose.jpg
+    │   │   │   index.png
+    │   │   │   mud.png
+    │   │   │   ok.png
+    │   │   │   payment.jpg
+    │   │   │   payment.png
+    │   │   │   posterVideo-60fps.mp4
+    │   │   │   posterVideo1.mp4
+    │   │   │   privacypolicy.jpg
+    │   │   │   refund.png
+    │   │   │   Roshan.png
+    │   │   │   sample1.png
+    │   │   │   sample2.png
+    │   │   │   spiderman-2-video.mp4
+    │   │   │   spiderman.jpeg
+    │   │   │   ssl_certificate.png
+    │   │   │   steam.png
+    │   │   │   tnq.jpg
+    │   │   │   Ubisoft.png
+    │   │   │   Welcome-to-GameStore.png
+    │   │   │   WWE2k23.jpg
+    │   │   │   xbox-games.png
+    │   │   │
+    │   │   ├───CreditCards
+    │   │   │       cc1.png
+    │   │   │       cc2.png
+    │   │   │       cc4.png
+    │   │   │       cc6.png
+    │   │   │       cc7.png
+    │   │   │       cc8.png
+    │   │   │
+    │   │   ├───gateway
+    │   │   │       apple-pay.png
+    │   │   │       bank-card-back-side.png
+    │   │   │       mastercard.png
+    │   │   │       visa.png
+    │   │   │
+    │   │   └───Icon
+    │   │           logo.ico
+    │   │
+    │   └───js
+    │           bootstrap.js
+    │           bootstrap.min.js
+    │           jquery-3.3.1.min.js
+    │           main.js
+    │           npm.js
+    │           popper.min.js
+    │
+    └───templates
+        │   account.html
+        │   checkout.html
+        │   contact.html
+        │   forget.html
+        │   header.html
+        │   index.html
+        │   login.html
+        │   MyCart.html
+        │   OrderConfirmation.html
+        │   OrderSummerySendGmail.html
+        │   Products.html
+        │   register.html
+        │   Services.html
+        │   shop.html
+        │   Singlepage.html
+        │   Trust.html
+        │
+        ├───legal
+        │       AboutUs.html
+        │       FAQ.html
+        │       Payments.html
+        │       Privacy_Policy.html
+        │       Shopping_Policy.html
+        │       Term_Condition.html
+        │
+        └───Profile
+                AddBilling.html
+                Billing.html
+                EditProfile.html
+                EditShipping.html
+                MyProfile.html
+                NavigatDrawer.html
+                Order.html
+                OrderDetails.html
+                Shipping.html
+
+
+├── /admin
+├───java
+│   └───com
+│       └───adminportal
+│           │   AdminPortalApplication.java
+│           │   
+│           ├───config
+│           │       SecurityConfig.java
+│           │       
+│           ├───Controller
+│           │       GameController.java
+│           │       MainController.java
+│           │
+│           ├───domain
+│           │   │   BillAddress.java
+│           │   │   CartItems.java
+│           │   │   Game.java
+│           │   │   GameCartItem.java
+│           │   │   Order.java
+│           │   │   Payment.java
+│           │   │   ShippingAddress.java
+│           │   │   shoppingCart.java
+│           │   │   User.java
+│           │   │   UserBilling.java
+│           │   │   UserPayment.java
+│           │   │   UserShipping.java
+│           │   │
+│           │   └───security
+│           │           Authority.java
+│           │           passwordResetToken.java
+│           │           Role.java
+│           │           UserRole.java
+│           │
+│           ├───Repository
+│           │       CartItemRepository.java
+│           │       GameRepository.java
+│           │       OrderServiceRepository.java
+│           │       RoleRepository.java
+│           │       UserBillingRepository.java
+│           │       UserPaymentRepository.java
+│           │       UserRepository.java
+│           │       UserServiceRepository.java
+│           │
+│           ├───sevices
+│           │   │   GameService.java
+│           │   │   OrderService.java
+│           │   │   UserBillingService.java
+│           │   │   UserPaymentService.java
+│           │   │   UserServices.java
+│           │   │   UserShippingService.java
+│           │   │
+│           │   └───impl
+│           │           GameServiceImpl.java
+│           │           OrderServiceImpl.java
+│           │           UserBillingServiceImpl.java
+│           │           UserPaymentServiceImp.java
+│           │           UserSecurityService.java
+│           │           UserServiceImpl.java
+│           │           UserShippingServiceImpl.java
+│           │
+│           └───utility
+│                   SecurityUtility.java
+│
+└───resources
+    │   application.properties
+    │
+    ├───META-INF
+    │       additional-spring-configuration-metadata.json
+    │
+    ├───static
+    │   ├───css
+    │   │       AddProduct.css
+    │   │       bootstrap-theme.css
+    │   │       bootstrap-theme.css.map
+    │   │       bootstrap-theme.min.css
+    │   │       bootstrap-theme.min.css.map
+    │   │       bootstrap.css
+    │   │       bootstrap.css.map
+    │   │       bootstrap.min.css
+    │   │       bootstrap.min.css.map
+    │   │       global.css
+    │   │       style.css
+    │   │       
+    │   ├───fonts
+    │   │       glyphicons-halflings-regular.eot
+    │   │       glyphicons-halflings-regular.svg
+    │   │       glyphicons-halflings-regular.ttf
+    │   │       glyphicons-halflings-regular.woff
+    │   │       glyphicons-halflings-regular.woff2
+    │   │
+    │   ├───images
+    │   │   │   cardset.jpg
+    │   │   │   controller.jpg
+    │   │   │   g3.jpg
+    │   │   │   gtav_1.jpg
+    │   │   │   gtav_2.jpg
+    │   │   │   gtav_3.jpg
+    │   │   │   hitman.jpg
+    │   │   │   logo.ico
+    │   │   │   spiderman.jpeg
+    │   │   │   
+    │   │   └───Games
+    │   │           1.jpg
+    │   │           2.jpg
+    │   │           3.jpg
+    │   │           52.jpg
+    │   │
+    │   └───js
+    │           bootstrap.js
+    │           bootstrap.min.js
+    │           npm.js
+    │
+    └───templates
+        │   addProducts.html
+        │   gameData.html
+        │   login.html
+        │   main.html
+        │   Singlepage.html
+        │   updateProduct.html
+        │
+        └───common
+                header.html
+
+
 
 The project is organized into two folders: one for users and one for admins, each running on different ports. 
 <details>
