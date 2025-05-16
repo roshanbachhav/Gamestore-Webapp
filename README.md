@@ -1,4 +1,4 @@
-This is my first major personal project developed using Java Spring Boot. The project is divided into two parts
+RV GameStore is an e-commerce web app for gaming accessories, featuring a responsive frontend built with HTML, CSS, and JavaScript. It integrates MySQL for efficient data management, ensuring a seamless shopping experience. The project is divided into two parts
 Frontend:
   HTML, CSS, JavaScript, Bootstrap, Tailwind CSS, Ajax, jQuery
 Backend:
